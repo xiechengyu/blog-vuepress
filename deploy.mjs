@@ -1,3 +1,5 @@
+await $`set -e`
+
 await $`rm -rf leetcode`
 
 await $`git clone git@github.com:xiechengyu/leetcode.git`
@@ -20,14 +22,12 @@ try {
 
 await $`git push -f git@github.com:xiechengyu/xiechengyu.github.io.git master`
 
-await $`cd -`
+// await $`cd ../`
 
-await $`git pull`
+// await $`git pull`
 
-await $`git add .`
+// await $`git add .`
 
-const time = new Date()
+// await $`git commit -m 'update'`
 
-await $`git commit -m 'update ${time}'`
-
-await $`git push origin main`
+// await $`git push origin main`
