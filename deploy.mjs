@@ -20,7 +20,7 @@ try {
   echo(error)
 }
 
-await $`git push -f git@github.com:xiechengyu/xiechengyu.github.io.git master`
+await $`git push -f https://github.com/xiechengyu/xiechengyu.github.io.git master`
 
 // await $`cd ../`
 
