@@ -4,7 +4,7 @@ await $`rm -rf leetcode`
 
 await $`git clone git@github.com:xiechengyu/leetcode.git`
 
-await $`node build.js`
+await $`zx build.mjs`
 
 await $`npm run build`
 
