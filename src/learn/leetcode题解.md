@@ -2005,6 +2005,88 @@ var postorderTraversal = function (root) {
 ```
 
 
+## 146.lru-缓存
+```js
+/*
+ * @lc app=leetcode.cn id=146 lang=javascript
+ *
+ * [146] LRU 缓存
+ * 
+ * 请你设计并实现一个满足  LRU (最近最少使用) 缓存 约束的数据结构。
+实现 LRUCache 类：
+LRUCache(int capacity) 以 正整数 作为容量 capacity 初始化 LRU 缓存
+int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。
+void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
+函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。
+
+ 
+
+示例：
+
+输入
+["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
+[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+输出
+[null, null, null, 1, null, -1, null, -1, 3, 4]
+
+解释
+LRUCache lRUCache = new LRUCache(2);
+lRUCache.put(1, 1); // 缓存是 {1=1}
+lRUCache.put(2, 2); // 缓存是 {1=1, 2=2}
+lRUCache.get(1);    // 返回 1
+lRUCache.put(3, 3); // 该操作会使得关键字 2 作废，缓存是 {1=1, 3=3}
+lRUCache.get(2);    // 返回 -1 (未找到)
+lRUCache.put(4, 4); // 该操作会使得关键字 1 作废，缓存是 {4=4, 3=3}
+lRUCache.get(1);    // 返回 -1 (未找到)
+lRUCache.get(3);    // 返回 3
+lRUCache.get(4);    // 返回 4
+ 
+ */
+
+// @lc code=start
+/**
+ * @param {number} capacity
+ */
+var LRUCache = function(capacity) {
+  this.capacity = capacity
+  this.map = new Map()
+};
+
+/** 
+ * @param {number} key
+ * @return {number}
+ */
+LRUCache.prototype.get = function(key) {
+  if (!this.map.has(key)) return -1;
+  const res = this.map.get(key)
+  this.map.delete(key)
+  this.map.set(key, res)
+  return res
+};
+
+/** 
+ * @param {number} key 
+ * @param {number} value
+ * @return {void}
+ */
+LRUCache.prototype.put = function(key, value) {
+  if (this.map.has(key)) this.map.delete(key);
+  this.map.set(key, value)
+  if (this.map.size > this.capacity) this.map.delete(this.map.keys().next().value);
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * var obj = new LRUCache(capacity)
+ * var param_1 = obj.get(key)
+ * obj.put(key,value)
+ */
+// @lc code=end
+
+
+```
+
+
 ## 155.最小栈
 ```js
 /*
@@ -2512,6 +2594,32 @@ var hammingWeight = function(n) {
  * @lc app=leetcode.cn id=202 lang=javascript
  *
  * [202] 快乐数
+ * 
+ * 编写一个算法来判断一个数 n 是不是快乐数。
+
+「快乐数」 定义为：
+
+对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。
+然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。
+如果这个过程 结果为 1，那么这个数就是快乐数。
+如果 n 是 快乐数 就返回 true ；不是，则返回 false 。
+
+ 
+
+示例 1：
+
+输入：n = 19
+输出：true
+解释：
+12 + 92 = 82
+82 + 22 = 68
+62 + 82 = 100
+12 + 02 + 02 = 1
+示例 2：
+
+输入：n = 2
+输出：false
+ 
  */
 
 // @lc code=start
@@ -2521,14 +2629,14 @@ var hammingWeight = function(n) {
  */
 var isHappy = function (n) {
     while (true) {
+        if (n === 1 || n === 7) return true
+        if (n < 10) return false
         n = n.toString()
-        let count = 0
-        for (let index = 0; index < n.length; index++) {
-            count += Number(n[index]) ** 2
+        let s = 0
+        for (let i = 0; i < n.length; i++) {
+            s += n[i] ** 2
         }
-        if (count === 1 || count === 130 || count === 129 || count === 133 || count == 190 || count === 167) return true
-        if (count > 100) return false
-        n = count
+        n = s
     }
 };
 // @lc code=end
@@ -4849,6 +4957,23 @@ var findDisappearedNumbers = function (nums) {
  * @lc app=leetcode.cn id=453 lang=javascript
  *
  * [453] 最小操作次数使数组元素相等
+ * 
+ * 给你一个长度为 n 的整数数组，每次操作将会使 n - 1 个元素增加 1 。返回让数组所有元素相等的最小操作次数。
+
+ 
+
+示例 1：
+
+输入：nums = [1,2,3]
+输出：3
+解释：
+只需要3次操作（注意每次操作会增加两个元素的值）：
+[1,2,3]  =>  [2,3,3]  =>  [3,4,3]  =>  [4,4,4]
+示例 2：
+
+输入：nums = [1,1,1]
+输出：0
+ 
  */
 
 // @lc code=start
@@ -4857,11 +4982,9 @@ var findDisappearedNumbers = function (nums) {
  * @return {number}
  */
 var minMoves = function (nums) {
-  if (nums.length === 1 || [... new Set(nums)].toString() === "0") return 0
-  const count = nums.reduce((prev, next) => {
-    return prev + next
-  }, 0)
-  return Math.abs(count - nums.length)
+  const sum = nums.reduce((p, c) => p + c, 0);
+  const min = Math.min(...nums);
+  return sum - nums.length * min;
 };
 // @lc code=end
 
@@ -4875,6 +4998,29 @@ var minMoves = function (nums) {
  * @lc app=leetcode.cn id=455 lang=javascript
  *
  * [455] 分发饼干
+ * 
+ * 假设你是一位很棒的家长，想要给你的孩子们一些小饼干。但是，每个孩子最多只能给一块饼干。
+
+对每个孩子 i，都有一个胃口值 g[i]，这是能让孩子们满足胃口的饼干的最小尺寸；并且每块饼干 j，都有一个尺寸 s[j] 。如果 s[j] >= g[i]，我们可以将这个饼干 j 分配给孩子 i ，这个孩子会得到满足。你的目标是尽可能满足越多数量的孩子，并输出这个最大数值。
+
+ 
+示例 1:
+
+输入: g = [1,2,3], s = [1,1]
+输出: 1
+解释: 
+你有三个孩子和两块小饼干，3个孩子的胃口值分别是：1,2,3。
+虽然你有两块小饼干，由于他们的尺寸都是1，你只能让胃口值是1的孩子满足。
+所以你应该输出1。
+示例 2:
+
+输入: g = [1,2], s = [1,2,3]
+输出: 2
+解释: 
+你有两个孩子和三块小饼干，2个孩子的胃口值分别是1,2。
+你拥有的饼干数量和尺寸都足以让所有孩子满足。
+所以你应该输出2.
+ 
  */
 
 // @lc code=start
@@ -4884,17 +5030,16 @@ var minMoves = function (nums) {
  * @return {number}
  */
 var findContentChildren = function (g, s) {
-  g = g.sort()
-  s = s.sort()
-  let count = 0
-  for (let i = 0; i < g.length; i++) {
-    const index = s.indexOf(g[i])
-    if (index > 0) {
-      count++
-      s.splice(index, 1)
+  g.sort((a, b) => a - b)
+  s.sort((a, b) => a - b)
+  let cookie = 0, child = 0
+  while (child < g.length && cookie < s.length) {
+    if (g[child] <= s[cookie]) {
+      child++;
     }
+    cookie++;
   }
-  return count
+  return child;
 };
 // @lc code=end
 
@@ -4908,6 +5053,26 @@ var findContentChildren = function (g, s) {
  * @lc app=leetcode.cn id=459 lang=javascript
  *
  * [459] 重复的子字符串
+ * 
+ * 给定一个非空的字符串 s ，检查是否可以通过由它的一个子串重复多次构成。
+
+ 
+
+示例 1:
+
+输入: s = "abab"
+输出: true
+解释: 可由子串 "ab" 重复两次构成。
+示例 2:
+
+输入: s = "aba"
+输出: false
+示例 3:
+
+输入: s = "abcabcabcabc"
+输出: true
+解释: 可由子串 "abc" 重复四次构成。 (或子串 "abcabc" 重复两次构成。)
+ 
  */
 
 // @lc code=start
@@ -4915,8 +5080,225 @@ var findContentChildren = function (g, s) {
  * @param {string} s
  * @return {boolean}
  */
-var repeatedSubstringPattern = function(s) {
-  return 1
+var repeatedSubstringPattern = function (s) {
+  if (s.length === 1) return false
+  let n = ""
+  for (let i = 0; i < s.length / 2; i++) {
+    n = s.substring(0, i + 1)
+    if (s.length % n.length !== 0) continue
+    if (n.repeat(s.length / n.length) === s) return true
+  }
+  return false
+};
+// @lc code=end
+
+
+```
+
+
+## 461.汉明距离
+```js
+/*
+ * @lc app=leetcode.cn id=461 lang=javascript
+ *
+ * [461] 汉明距离
+ * 
+ * 两个整数之间的 汉明距离 指的是这两个数字对应二进制位不同的位置的数目。
+
+给你两个整数 x 和 y，计算并返回它们之间的汉明距离。
+
+ 
+
+示例 1：
+
+输入：x = 1, y = 4
+输出：2
+解释：
+1   (0 0 0 1)
+4   (0 1 0 0)
+       ↑   ↑
+上面的箭头指出了对应二进制位不同的位置。
+示例 2：
+
+输入：x = 3, y = 1
+输出：1
+ 
+ */
+
+// @lc code=start
+/**
+ * @param {number} x
+ * @param {number} y
+ * @return {number}
+ */
+var hammingDistance = function (x, y) {
+  let res = 0, max = Math.max(x, y), min = Math.min(x, y)
+  max = max.toString(2)
+  min = min.toString(2)
+  min = "0".repeat(max.length - min.length) + min
+  for (let i = 0; i < max.length; i++) {
+    if (max[i] !== min[i]) res++
+  }
+  return res
+};
+// @lc code=end
+
+
+```
+
+
+## 463.岛屿的周长
+```js
+/*
+ * @lc app=leetcode.cn id=463 lang=javascript
+ *
+ * [463] 岛屿的周长
+ * 
+ * 给定一个 row x col 的二维网格地图 grid ，其中：grid[i][j] = 1 表示陆地， grid[i][j] = 0 表示水域。
+
+网格中的格子 水平和垂直 方向相连（对角线方向不相连）。整个网格被水完全包围，但其中恰好有一个岛屿（或者说，一个或多个表示陆地的格子相连组成的岛屿）。
+
+岛屿中没有“湖”（“湖” 指水域在岛屿内部且不和岛屿周围的水相连）。格子是边长为 1 的正方形。网格为长方形，且宽度和高度均不超过 100 。计算这个岛屿的周长。
+
+ 
+
+示例 1：
+
+
+
+输入：grid = [[0,1,0,0],[1,1,1,0],[0,1,0,0],[1,1,0,0]]
+输出：16
+解释：它的周长是上面图片中的 16 个黄色的边
+示例 2：
+
+输入：grid = [[1]]
+输出：4
+示例 3：
+
+输入：grid = [[1,0]]
+输出：4
+ 
+ */
+
+// @lc code=start
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var islandPerimeter = function (grid) {
+  let a = 0, b = 0
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
+      if (grid[i][j] === 0) continue;
+      a++;
+      if (grid[i - 1] && grid[i - 1][j] === 1) b++
+      if (grid[i + 1] && grid[i + 1][j] === 1) b++
+      if (grid[i][j - 1] === 1) b++
+      if (grid[i][j + 1] === 1) b++
+    }
+  }
+  return a * 4 - b
+};
+// @lc code=end
+
+
+```
+
+
+## 476.数字的补数
+```js
+/*
+ * @lc app=leetcode.cn id=476 lang=javascript
+ *
+ * [476] 数字的补数
+ * 
+ * 对整数的二进制表示取反（0 变 1 ，1 变 0）后，再转换为十进制表示，可以得到这个整数的补数。
+
+例如，整数 5 的二进制表示是 "101" ，取反后得到 "010" ，再转回十进制表示得到补数 2 。
+给你一个整数 num ，输出它的补数。
+
+ 
+
+示例 1：
+
+输入：num = 5
+输出：2
+解释：5 的二进制表示为 101（没有前导零位），其补数为 010。所以你需要输出 2 。
+示例 2：
+
+输入：num = 1
+输出：0
+解释：1 的二进制表示为 1（没有前导零位），其补数为 0。所以你需要输出 0 。
+ 
+ */
+
+// @lc code=start
+/**
+ * @param {number} num
+ * @return {number}
+ */
+var findComplement = function (num) {
+  num = num.toString(2)
+  let s = ""
+  for (let i = 0; i < num.length; i++) {
+    s += num[i] === "0" ? "1" : "0"
+  }
+  return parseInt(s, 2)
+};
+// @lc code=end
+
+
+```
+
+
+## 482.密钥格式化
+```js
+/*
+ * @lc app=leetcode.cn id=482 lang=javascript
+ *
+ * [482] 密钥格式化
+ * 
+ * 给定一个许可密钥字符串 s，仅由字母、数字字符和破折号组成。字符串由 n 个破折号分成 n + 1 组。你也会得到一个整数 k 。
+
+我们想要重新格式化字符串 s，使每一组包含 k 个字符，除了第一组，它可以比 k 短，但仍然必须包含至少一个字符。此外，两组之间必须插入破折号，并且应该将所有小写字母转换为大写字母。
+
+返回 重新格式化的许可密钥 。
+
+ 
+
+示例 1：
+
+输入：S = "5F3Z-2e-9-w", k = 4
+输出："5F3Z-2E9W"
+解释：字符串 S 被分成了两个部分，每部分 4 个字符；
+     注意，两个额外的破折号需要删掉。
+示例 2：
+
+输入：S = "2-5g-3-J", k = 2
+输出："2-5G-3J"
+解释：字符串 S 被分成了 3 个部分，按照前面的规则描述，第一部分的字符可以少于给定的数量，其余部分皆为 2 个字符。
+ 
+ */
+
+// @lc code=start
+/**
+ * @param {string} s
+ * @param {number} k
+ * @return {string}
+ */
+var licenseKeyFormatting = function (s, k) {
+  let res = ""
+  s = s.replace(/\-/g, "").toLocaleUpperCase()
+  const head = s.length % k
+  if (head > 0) {
+    res += s.substring(0, head)
+    s = s.substring(head, s.length)
+  }
+  for (let i = 0; i < s.length; i += k) {
+    if (res.length > 0) res += "-"
+    res += s.substring(i, i + k)
+  }
+  return res
 };
 // @lc code=end
 
@@ -4966,6 +5348,56 @@ var findMaxConsecutiveOnes = function (nums) {
     }
   }
   return max
+};
+// @lc code=end
+
+
+```
+
+
+## 492.构造矩形
+```js
+/*
+ * @lc app=leetcode.cn id=492 lang=javascript
+ *
+ * [492] 构造矩形
+ * 
+ * 作为一位web开发者， 懂得怎样去规划一个页面的尺寸是很重要的。 所以，现给定一个具体的矩形页面面积，你的任务是设计一个长度为 L 和宽度为 W 且满足以下要求的矩形的页面。要求：
+
+你设计的矩形页面必须等于给定的目标面积。
+宽度 W 不应大于长度 L ，换言之，要求 L >= W 。
+长度 L 和宽度 W 之间的差距应当尽可能小。
+返回一个 数组 [L, W]，其中 L 和 W 是你按照顺序设计的网页的长度和宽度。
+ 
+
+示例1：
+
+输入: 4
+输出: [2, 2]
+解释: 目标面积是 4， 所有可能的构造方案有 [1,4], [2,2], [4,1]。
+但是根据要求2，[1,4] 不符合要求; 根据要求3，[2,2] 比 [4,1] 更能符合要求. 所以输出长度 L 为 2， 宽度 W 为 2。
+示例 2:
+
+输入: area = 37
+输出: [37,1]
+示例 3:
+
+输入: area = 122122
+输出: [427,286]
+ 
+ */
+
+// @lc code=start
+/**
+ * @param {number} area
+ * @return {number[]}
+ */
+var constructRectangle = function (area) {
+  let l = Math.ceil(Math.sqrt(area))
+  while (true) {
+    if (area % l === 0) return [l, area / l]
+    l++
+  }
 };
 // @lc code=end
 
@@ -7136,6 +7568,17 @@ var numberOfLines = function (widths, s) {
  * @lc app=leetcode.cn id=812 lang=javascript
  *
  * [812] 最大三角形面积
+ * 
+ * 给定包含多个点的集合，从其中取三个点组成三角形，返回能组成的最大三角形的面积。
+
+示例:
+输入: points = [[0,0],[0,1],[1,0],[0,2],[2,0]]
+输出: 2
+解释: 
+这五个点如下图所示。组成的橙色三角形是最大的，面积为2。
+
+
+
  */
 
 // @lc code=start
@@ -7143,14 +7586,26 @@ var numberOfLines = function (widths, s) {
  * @param {number[][]} points
  * @return {number}
  */
-var largestTriangleArea = function (points) {
-  let l = 0, w = 0
-  for (let i = 1; i < points.length; i++) {
-    l = Math.max(l, points[i][0] > points[i - 1][0] ? points[i][0] - points[i - 1][0] : points[i - 1][0] - points[i][0])
-    w = Math.max(w, points[i][1] > points[i - 1][1] ? points[i][1] - points[i - 1][1] : points[i - 1][1] - points[i][1])
+function largestTriangleArea(points) {
+  let max = Number.MIN_SAFE_INTEGER
+  for (const point1 of points) {
+    for (const point2 of points) {
+      for (const point3 of points) {
+        max = Math.max(max, countTriangleArea([point1, point2, point3]))
+      }
+    }
   }
-  return (l * w) / 2
-};
+  return max
+}
+
+function countTriangleArea(points) {
+  const [[x1, y1], [x2, y2], [x3, y3]] = points
+  // 海伦公式
+  // 向量 正弦定理
+  // return (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2
+  // 左边梯形 + 右边梯形 - 底部梯形 = 顶部三角形
+  return (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2
+}
 // @lc code=end
 
 
@@ -7271,6 +7726,32 @@ var shortestToChar = function (s, c) {
  * @lc app=leetcode.cn id=824 lang=javascript
  *
  * [824] 山羊拉丁文
+ * 
+ * 给你一个由若干单词组成的句子 sentence ，单词间由空格分隔。每个单词仅由大写和小写英文字母组成。
+
+请你将句子转换为 “山羊拉丁文（Goat Latin）”（一种类似于 猪拉丁文 - Pig Latin 的虚构语言）。山羊拉丁文的规则如下：
+
+如果单词以元音开头（'a', 'e', 'i', 'o', 'u'），在单词后添加"ma"。
+例如，单词 "apple" 变为 "applema" 。
+如果单词以辅音字母开头（即，非元音字母），移除第一个字符并将它放到末尾，之后再添加"ma"。
+例如，单词 "goat" 变为 "oatgma" 。
+根据单词在句子中的索引，在单词最后添加与索引相同数量的字母'a'，索引从 1 开始。
+例如，在第一个单词后添加 "a" ，在第二个单词后添加 "aa" ，以此类推。
+返回将 sentence 转换为山羊拉丁文后的句子。
+
+ 
+
+示例 1：
+
+输入：sentence = "I speak Goat Latin"
+输出："Imaa peaksmaaa oatGmaaaa atinLmaaaaa"
+示例 2：
+
+输入：sentence = "The quick brown fox jumped over the lazy dog"
+输出："heTmaa uickqmaaa rownbmaaaa oxfmaaaaa umpedjmaaaaaa overmaaaaaaa hetmaaaaaaaa azylmaaaaaaaaa ogdmaaaaaaaaaa"
+ 
+
+
  */
 
 // @lc code=start
@@ -7299,6 +7780,39 @@ var toGoatLatin = function (sentence) {
  * @lc app=leetcode.cn id=830 lang=javascript
  *
  * [830] 较大分组的位置
+ * 
+ * 在一个由小写字母构成的字符串 s 中，包含由一些连续的相同字符所构成的分组。
+
+例如，在字符串 s = "abbxxxxzyy" 中，就含有 "a", "bb", "xxxx", "z" 和 "yy" 这样的一些分组。
+
+分组可以用区间 [start, end] 表示，其中 start 和 end 分别表示该分组的起始和终止位置的下标。上例中的 "xxxx" 分组用区间表示为 [3,6] 。
+
+我们称所有包含大于或等于三个连续字符的分组为 较大分组 。
+
+找到每一个 较大分组 的区间，按起始位置下标递增顺序排序后，返回结果。
+
+ 
+
+示例 1：
+
+输入：s = "abbxxxxzzy"
+输出：[[3,6]]
+解释："xxxx" 是一个起始于 3 且终止于 6 的较大分组。
+示例 2：
+
+输入：s = "abc"
+输出：[]
+解释："a","b" 和 "c" 均不是符合要求的较大分组。
+示例 3：
+
+输入：s = "abcdddeeeeaabbbcd"
+输出：[[3,5],[6,9],[12,14]]
+解释：较大分组为 "ddd", "eeee" 和 "bbb"
+示例 4：
+
+输入：s = "aba"
+输出：[]
+ 
  */
 
 // @lc code=start
@@ -7334,6 +7848,30 @@ var largeGroupPositions = function (s) {
  * @lc app=leetcode.cn id=832 lang=javascript
  *
  * [832] 翻转图像
+ * 
+ * 给定一个 n x n 的二进制矩阵 image ，先 水平 翻转图像，然后 反转 图像并返回 结果 。
+
+水平翻转图片就是将图片的每一行都进行翻转，即逆序。
+
+例如，水平翻转 [1,1,0] 的结果是 [0,1,1]。
+反转图片的意思是图片中的 0 全部被 1 替换， 1 全部被 0 替换。
+
+例如，反转 [0,1,1] 的结果是 [1,0,0]。
+ 
+
+示例 1：
+
+输入：image = [[1,1,0],[1,0,1],[0,0,0]]
+输出：[[1,0,0],[0,1,0],[1,1,1]]
+解释：首先翻转每一行: [[0,1,1],[1,0,1],[0,0,0]]；
+     然后反转图片: [[1,0,0],[0,1,0],[1,1,1]]
+示例 2：
+
+输入：image = [[1,1,0,0],[1,0,0,1],[0,1,1,1],[1,0,1,0]]
+输出：[[1,1,0,0],[0,1,1,0],[0,0,0,1],[1,0,1,0]]
+解释：首先翻转每一行: [[0,0,1,1],[1,0,0,1],[1,1,1,0],[0,1,0,1]]；
+     然后反转图片: [[1,1,0,0],[0,1,1,0],[0,0,0,1],[1,0,1,0]]
+ 
  */
 
 // @lc code=start
@@ -7356,6 +7894,28 @@ var flipAndInvertImage = function (image) {
  * @lc app=leetcode.cn id=836 lang=javascript
  *
  * [836] 矩形重叠
+ * 
+ * 矩形以列表 [x1, y1, x2, y2] 的形式表示，其中 (x1, y1) 为左下角的坐标，(x2, y2) 是右上角的坐标。矩形的上下边平行于 x 轴，左右边平行于 y 轴。
+
+如果相交的面积为 正 ，则称两矩形重叠。需要明确的是，只在角或边接触的两个矩形不构成重叠。
+
+给出两个矩形 rec1 和 rec2 。如果它们重叠，返回 true；否则，返回 false 。
+
+ 
+
+示例 1：
+
+输入：rec1 = [0,0,2,2], rec2 = [1,1,3,3]
+输出：true
+示例 2：
+
+输入：rec1 = [0,0,1,1], rec2 = [1,0,2,1]
+输出：false
+示例 3：
+
+输入：rec1 = [0,0,1,1], rec2 = [2,2,3,3]
+输出：false
+ 
  */
 
 // @lc code=start
@@ -7381,6 +7941,29 @@ var isRectangleOverlap = function (r1, r2) {
  * @lc app=leetcode.cn id=844 lang=javascript
  *
  * [844] 比较含退格的字符串
+ * 
+ * 给定 s 和 t 两个字符串，当它们分别被输入到空白的文本编辑器后，如果两者相等，返回 true 。# 代表退格字符。
+
+注意：如果对空文本输入退格字符，文本继续为空。
+
+ 
+
+示例 1：
+
+输入：s = "ab#c", t = "ad#c"
+输出：true
+解释：s 和 t 都会变成 "ac"。
+示例 2：
+
+输入：s = "ab##", t = "c#d#"
+输出：true
+解释：s 和 t 都会变成 ""。
+示例 3：
+
+输入：s = "a#c", t = "b"
+输出：false
+解释：s 会变成 "c"，但 t 仍然是 "b"。
+ 
  */
 
 // @lc code=start
@@ -7418,6 +8001,37 @@ var backspaceCompare = function (s, t) {
  * @lc app=leetcode.cn id=852 lang=javascript
  *
  * [852] 山脉数组的峰顶索引
+ * 
+ * 符合下列属性的数组 arr 称为 山脉数组 ：
+arr.length >= 3
+存在 i（0 < i < arr.length - 1）使得：
+arr[0] < arr[1] < ... arr[i-1] < arr[i] 
+arr[i] > arr[i+1] > ... > arr[arr.length - 1]
+给你由整数组成的山脉数组 arr ，返回任何满足 arr[0] < arr[1] < ... arr[i - 1] < arr[i] > arr[i + 1] > ... > arr[arr.length - 1] 的下标 i 。
+
+ 
+
+示例 1：
+
+输入：arr = [0,1,0]
+输出：1
+示例 2：
+
+输入：arr = [0,2,1,0]
+输出：1
+示例 3：
+
+输入：arr = [0,10,5,2]
+输出：1
+示例 4：
+
+输入：arr = [3,4,5,1]
+输出：2
+示例 5：
+
+输入：arr = [24,69,100,99,79,78,67,36,26,19]
+输出：2
+
  */
 
 // @lc code=start
