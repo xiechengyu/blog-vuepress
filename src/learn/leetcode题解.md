@@ -1538,6 +1538,64 @@ var sortedArrayToBST = function(nums) {
 ```
 
 
+## 108.将有序数组转换为二叉搜索树
+```ts
+/*
+ * @lc app=leetcode.cn id=108 lang=typescript
+ *
+ * [108] 将有序数组转换为二叉搜索树
+ * 
+ * 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
+
+高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
+
+ 
+
+示例 1：
+
+
+输入：nums = [-10,-3,0,5,9]
+输出：[0,-3,9,-10,null,5]
+解释：[0,-10,5,null,-3,null,9] 也将被视为正确答案：
+
+示例 2：
+
+
+输入：nums = [1,3]
+输出：[3,1]
+解释：[1,null,3] 和 [3,1] 都是高度平衡二叉搜索树。
+ 
+ */
+
+// @lc code=start
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function sortedArrayToBST(nums: number[]): TreeNode | null {
+  if(!nums || nums.length ===0) return null
+  let mid = Math.ceil(nums.length/2)-1;
+  let head = new TreeNode(nums[mid])
+  head.left = sortedArrayToBST(nums.slice(0,mid))
+  head.right = sortedArrayToBST(nums.slice(mid+1))
+  return head
+};
+// @lc code=end
+
+
+```
+
+
 ## 110.平衡二叉树
 ```js
 /*
@@ -4566,21 +4624,103 @@ var isSubsequence = function (s, t) {
 
 
 ## 401.二进制手表
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=401 lang=javascript
+ * @lc app=leetcode.cn id=401 lang=typescript
  *
  * [401] 二进制手表
+ * 
+ * 二进制手表顶部有 4 个 LED 代表 小时（0-11），底部的 6 个 LED 代表 分钟（0-59）。每个 LED 代表一个 0 或 1，最低位在右侧。
+
+例如，下面的二进制手表读取 "3:25" 。
+
+
+（图源：WikiMedia - Binary clock samui moon.jpg ，许可协议：Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) ）
+
+给你一个整数 turnedOn ，表示当前亮着的 LED 的数量，返回二进制手表可以表示的所有可能时间。你可以 按任意顺序 返回答案。
+
+小时不会以零开头：
+
+例如，"01:00" 是无效的时间，正确的写法应该是 "1:00" 。
+分钟必须由两位数组成，可能会以零开头：
+
+例如，"10:2" 是无效的时间，正确的写法应该是 "10:02" 。
+ 
+
+示例 1：
+
+输入：turnedOn = 1
+输出：["0:01","0:02","0:04","0:08","0:16","0:32","1:00","2:00","4:00","8:00"]
+示例 2：
+
+输入：turnedOn = 9
+输出：[]
+ 
+ */
+
+// @lc code=start
+function readBinaryWatch(turnedOn: number): string[] {
+  const res: string[] = []
+  for (let i = 0; i < 12; i++) {
+    for (let j = 0; j < 60; j++) {
+      const hour = i.toString(2).match(/1/g), second = j.toString(2).match(/1/g), hourNum = hour ? hour.length : 0, secondNum = second ? second.length : 0
+      if (hourNum + secondNum === turnedOn) {
+        res.push(`${i}:${j < 10 ? '0' + j : j}`)
+      }
+    }
+  }
+  return res
+};
+// @lc code=end
+
+
+```
+
+
+## 404.左叶子之和
+```ts
+/*
+ * @lc app=leetcode.cn id=404 lang=typescript
+ *
+ * [404] 左叶子之和
+ * 
+ * 给定二叉树的根节点 root ，返回所有左叶子之和。
+
+ 
+
+示例 1：
+
+
+
+输入: root = [3,9,20,null,null,15,7] 
+输出: 24 
+解释: 在这个二叉树中，有两个左叶子，分别是 9 和 15，所以返回 24
+示例 2:
+
+输入: root = [1]
+输出: 0
+ 
  */
 
 // @lc code=start
 /**
- * @param {number} turnedOn
- * @return {string[]}
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
  */
-var readBinaryWatch = function(turnedOn) {
-  
-};
+function sumOfLeftLeaves(root: TreeNode | null, isLeftNode = false): number {
+  if (!root) return 0;
+  if (isLeftNode && !root.left && !root.right) return root.val;
+  return sumOfLeftLeaves(root.left, true) + sumOfLeftLeaves(root.right);
+}
 // @lc code=end
 
 
@@ -4603,6 +4743,61 @@ var readBinaryWatch = function(turnedOn) {
 var toHex = function(num) {
 
 };
+// @lc code=end
+
+
+```
+
+
+## 405.数字转换为十六进制数
+```ts
+/*
+ * @lc app=leetcode.cn id=405 lang=typescript
+ *
+ * [405] 数字转换为十六进制数
+ * 
+ * 给定一个整数，编写一个算法将这个数转换为十六进制数。对于负整数，我们通常使用 补码运算 方法。
+
+注意:
+
+十六进制中所有字母(a-f)都必须是小写。
+十六进制字符串中不能包含多余的前导零。如果要转化的数为0，那么以单个字符'0'来表示；对于其他情况，十六进制字符串中的第一个字符将不会是0字符。 
+给定的数确保在32位有符号整数范围内。
+不能使用任何由库提供的将数字直接转换或格式化为十六进制的方法。
+示例 1：
+
+输入:
+26
+
+输出:
+"1a"
+示例 2：
+
+输入:
+-1
+
+输出:
+"ffffffff"
+
+ */
+
+// @lc code=start
+function toHex(num: number): string {
+  if (num < 0) num += 2 ** 32
+  return get16(num)
+};
+
+function get16(num: number): string {
+  if (num === 0) return "0";
+  const map = new Map([[10, "a"], [11, "b"], [12, "c"], [13, "d"], [14, "e"], [15, "f"]])
+  let res = ""
+  while (num > 0) {
+    const a = num % 16
+    num = Math.floor(num / 16);
+    res = (map.has(a) ? map.get(a) : a.toString()) + res
+  }
+  return res
+}
 // @lc code=end
 
 
@@ -5406,27 +5601,50 @@ var constructRectangle = function (area) {
 
 
 ## 495.提莫攻击
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=495 lang=javascript
+ * @lc app=leetcode.cn id=495 lang=typescript
  *
  * [495] 提莫攻击
+ * 
+ * 在《英雄联盟》的世界中，有一个叫 “提莫” 的英雄。他的攻击可以让敌方英雄艾希（编者注：寒冰射手）进入中毒状态。
+
+当提莫攻击艾希，艾希的中毒状态正好持续 duration 秒。
+
+正式地讲，提莫在 t 发起发起攻击意味着艾希在时间区间 [t, t + duration - 1]（含 t 和 t + duration - 1）处于中毒状态。如果提莫在中毒影响结束 前 再次攻击，中毒状态计时器将会 重置 ，在新的攻击之后，中毒影响将会在 duration 秒后结束。
+
+给你一个 非递减 的整数数组 timeSeries ，其中 timeSeries[i] 表示提莫在 timeSeries[i] 秒时对艾希发起攻击，以及一个表示中毒持续时间的整数 duration 。
+
+返回艾希处于中毒状态的 总 秒数。
+
+ 
+示例 1：
+
+输入：timeSeries = [1,4], duration = 2
+输出：4
+解释：提莫攻击对艾希的影响如下：
+- 第 1 秒，提莫攻击艾希并使其立即中毒。中毒状态会维持 2 秒，即第 1 秒和第 2 秒。
+- 第 4 秒，提莫再次攻击艾希，艾希中毒状态又持续 2 秒，即第 4 秒和第 5 秒。
+艾希在第 1、2、4、5 秒处于中毒状态，所以总中毒秒数是 4 。
+示例 2：
+
+输入：timeSeries = [1,2], duration = 2
+输出：3
+解释：提莫攻击对艾希的影响如下：
+- 第 1 秒，提莫攻击艾希并使其立即中毒。中毒状态会维持 2 秒，即第 1 秒和第 2 秒。
+- 第 2 秒，提莫再次攻击艾希，并重置中毒计时器，艾希中毒状态需要持续 2 秒，即第 2 秒和第 3 秒。
+艾希在第 1、2、3 秒处于中毒状态，所以总中毒秒数是 3 。
+ 
  */
 
 // @lc code=start
-/**
- * @param {number[]} timeSeries
- * @param {number} duration
- * @return {number}
- */
-var findPoisonedDuration = function (timeSeries, duration) {
-  const set = new Set()
+function findPoisonedDuration(timeSeries: number[], duration: number): number {
+  let res: number = 0, until: number = 0
   for (let i = 0; i < timeSeries.length; i++) {
-    for (let j = 0; j < duration; j++) {
-      set.add(timeSeries[i] + j)
-    }
+    res += timeSeries[i] > until ? duration : duration - (until - timeSeries[i])
+    until = timeSeries[i] + duration
   }
-  return set.size
+  return res
 };
 // @lc code=end
 
@@ -5560,6 +5778,78 @@ var findWords = function (words) {
 ```
 
 
+## 501.二叉搜索树中的众数
+```ts
+/*
+ * @lc app=leetcode.cn id=501 lang=typescript
+ *
+ * [501] 二叉搜索树中的众数
+ * 
+ * 给你一个含重复值的二叉搜索树（BST）的根节点 root ，找出并返回 BST 中的所有 众数（即，出现频率最高的元素）。
+
+如果树中有不止一个众数，可以按 任意顺序 返回。
+
+假定 BST 满足如下定义：
+
+结点左子树中所含节点的值 小于等于 当前节点的值
+结点右子树中所含节点的值 大于等于 当前节点的值
+左子树和右子树都是二叉搜索树
+ 
+
+示例 1：
+
+
+输入：root = [1,null,2,2]
+输出：[2]
+示例 2：
+
+输入：root = [0]
+输出：[0]
+ 
+
+
+ */
+
+// @lc code=start
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function findMode(root: TreeNode | null): number[] {
+  const map = new Map(), res: number[] = [], stack = []
+  let max = 0
+  while (root || stack.length > 0) {
+      if (root) {
+          map.set(root.val, (map.get(root.val) || 0) + 1)
+          max = Math.max(max, map.get(root.val))
+          stack.push(root)
+          root = root.left
+      } else {
+          root = stack.pop()
+          root = root.right
+      }
+  }
+  for (const [key, value] of map) {
+    if (value === max) res.push(key)
+  }
+  return res
+};
+// @lc code=end
+
+
+```
+
+
 ## 504.七进制数
 ```js
 /*
@@ -5577,6 +5867,38 @@ var convertToBase7 = function (num) {
   const flag = num < 0
   num = Math.abs(num)
   
+};
+// @lc code=end
+
+
+```
+
+
+## 504.七进制数
+```ts
+/*
+ * @lc app=leetcode.cn id=504 lang=typescript
+ *
+ * [504] 七进制数
+ * 
+ * 给定一个整数 num，将其转化为 7 进制，并以字符串形式输出。
+
+ 
+
+示例 1:
+
+输入: num = 100
+输出: "202"
+示例 2:
+
+输入: num = -7
+输出: "-10"
+ 
+ */
+
+// @lc code=start
+function convertToBase7(num: number): string {
+  return num.toString(7)
 };
 // @lc code=end
 
@@ -5832,6 +6154,54 @@ var detectCapitalUse = function (word) {
 ```
 
 
+## 530.二叉搜索树的最小绝对差
+```ts
+/*
+ * @lc app=leetcode.cn id=530 lang=typescript
+ *
+ * [530] 二叉搜索树的最小绝对差
+ */
+
+// @lc code=start
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function getMinimumDifference(root: TreeNode | null): number {
+  const stack = [], arr: number[] = []
+  while (root || stack.length > 0) {
+    if (root) {
+      arr.push(root.val)
+      stack.push(root)
+      root = root.left
+    } else {
+      root = stack.pop()
+      root = root.right
+    }
+  }
+  arr.sort((a, b) => a - b)
+  let res: number = arr[1] - arr[0]
+  for (let i = 2; i < arr.length; i++) {
+    res = Math.min(arr[i] - arr[i - 1], res)
+  }
+  return res
+};
+// @lc code=end
+
+
+```
+
+
 ## 541.反转字符串-ii
 ```js
 /*
@@ -5871,6 +6241,67 @@ var detectCapitalUse = function (word) {
     }
   }
   return s.join("")
+};
+// @lc code=end
+
+
+```
+
+
+## 543.二叉树的直径
+```ts
+/*
+ * @lc app=leetcode.cn id=543 lang=typescript
+ *
+ * [543] 二叉树的直径
+ * 
+ * 给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过也可能不穿过根结点。
+
+ 
+
+示例 :
+给定二叉树
+
+          1
+         / \
+        2   3
+       / \     
+      4   5    
+返回 3, 它的长度是路径 [4,2,1,3] 或者 [5,2,1,3]。
+
+ 
+
+注意：两结点之间的路径长度是以它们之间边的数目表示。
+
+
+ */
+
+// @lc code=start
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+function diameterOfBinaryTree(root: TreeNode | null): number {
+  let result = 0
+  function deep(root: TreeNode | null) {
+    if (!root) return -1;
+    const left = root.left ? deep(root.left) + 1 : 0;
+    const right = root.right ? deep(root.right) + 1 : 0;
+    result = Math.max(left + right, result);
+    return Math.max(left, right);
+  }
+  deep(root)
+  return result
 };
 // @lc code=end
 
@@ -6591,6 +7022,49 @@ var calPoints = function (ops) {
     res += item;
   }
   return res;
+};
+// @lc code=end
+
+
+```
+
+
+## 693.交替位二进制数
+```ts
+/*
+ * @lc app=leetcode.cn id=693 lang=typescript
+ *
+ * [693] 交替位二进制数
+ * 
+ * 给定一个正整数，检查它的二进制表示是否总是 0、1 交替出现：换句话说，就是二进制表示中相邻两位的数字永不相同。
+
+ 
+
+示例 1：
+
+输入：n = 5
+输出：true
+解释：5 的二进制表示是：101
+示例 2：
+
+输入：n = 7
+输出：false
+解释：7 的二进制表示是：111.
+示例 3：
+
+输入：n = 11
+输出：false
+解释：11 的二进制表示是：1011.
+ 
+ */
+
+// @lc code=start
+function hasAlternatingBits(n: number): boolean {
+  const n2 = n.toString(2)
+  for (let i = 0; i < n2.length; i += 2) {
+    if (n2[i] === "0" || n2[i + 1] === "1") return false
+  }
+  return true
 };
 // @lc code=end
 
