@@ -6559,25 +6559,43 @@ var findLHS = function(nums) {
 
 
 ## 598.范围求和-ii
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=598 lang=javascript
+ * @lc app=leetcode.cn id=598 lang=typescript
  *
  * [598] 范围求和 II
+ * 
+ * 给你一个 m x n 的矩阵 M ，初始化时所有的 0 和一个操作数组 op ，其中 ops[i] = [ai, bi] 意味着当所有的 0 <= x < ai 和 0 <= y < bi 时， M[x][y] 应该加 1。
+
+在 执行完所有操作后 ，计算并返回 矩阵中最大整数的个数 。
+
+ 
+
+示例 1:
+
+
+
+输入: m = 3, n = 3，ops = [[2,2],[3,3]]
+输出: 4
+解释: M 中最大的整数是 2, 而且 M 中有4个值为2的元素。因此返回 4。
+示例 2:
+
+输入: m = 3, n = 3, ops = [[2,2],[3,3],[3,3],[3,3],[2,2],[3,3],[3,3],[3,3],[2,2],[3,3],[3,3],[3,3]]
+输出: 4
+示例 3:
+
+输入: m = 3, n = 3, ops = []
+输出: 9
+ 
+
+
  */
 
 // @lc code=start
-/**
- * @param {number} m
- * @param {number} n
- * @param {number[][]} ops
- * @return {number}
- */
-var maxCount = function(m, n, ops) {
-
+function maxCount(m: number, n: number, ops: number[][]): number {
+  return ops.length === 0 ? m * n : Math.min(...ops.map(i => i[0])) * Math.min(...ops.map(i => i[1]));
 };
 // @lc code=end
-
 
 ```
 
@@ -6634,22 +6652,41 @@ var findRestaurant = function (list1, list2) {
 
 
 ## 605.种花问题
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=605 lang=javascript
+ * @lc app=leetcode.cn id=605 lang=typescript
  *
  * [605] 种花问题
+ * 
+ * 假设有一个很长的花坛，一部分地块种植了花，另一部分却没有。可是，花不能种植在相邻的地块上，它们会争夺水源，两者都会死去。
+
+给你一个整数数组  flowerbed 表示花坛，由若干 0 和 1 组成，其中 0 表示没种植花，1 表示种植了花。另有一个数 n ，能否在不打破种植规则的情况下种入 n 朵花？能则返回 true ，不能则返回 false。
+
+ 
+
+示例 1：
+
+输入：flowerbed = [1,0,0,0,1], n = 1
+输出：true
+示例 2：
+
+输入：flowerbed = [1,0,0,0,1], n = 2
+输出：false
+ 
  */
 
 // @lc code=start
-/**
- * @param {number[]} flowerbed
- * @param {number} n
- * @return {boolean}
- */
-var canPlaceFlowers = function (flowerbed, n) {
-  const len = flowerbed[1] === 1 || flowerbed[flowerbed.length - 2] === 1 ? flowerbed.length - 1 : flowerbed.length, all = len % 2 === 0 ? len / 2 : (len + 1) / 2, aready = flowerbed.reduce((prev, next) => prev + next, 0)
-  return all - aready - n >= 0
+function canPlaceFlowers(flowerbed: number[], n: number): boolean {
+  if (n === 0) return true
+  let count: number = 0
+  for (let i = 0; i < flowerbed.length; i++) {
+    if (flowerbed[i - 1] !== 1 && flowerbed[i] !== 1 && flowerbed[i + 1] !== 1) {
+      count++
+      flowerbed[i] = 1
+    }
+    if (count === n) return true
+  }
+  return false
 };
 // @lc code=end
 
@@ -6753,23 +6790,23 @@ var findMaxAverage = function (nums, k) {
 
 
 ## 645.错误的集合
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=645 lang=javascript
+ * @lc app=leetcode.cn id=645 lang=typescript
  *
  * [645] 错误的集合
  */
 
 // @lc code=start
-/**
- * @param {number[]} nums
- * @return {number[]}
- */
-var findErrorNums = function (nums) {
-  nums = nums.sort((a, b) => a - b)
+function findErrorNums(nums: number[]) {
+  nums.sort((a, b) => a - b)
+  const nums1 = [...new Set(nums)], res: number[] = []
   for (let i = 0; i < nums.length; i++) {
-    if (nums[i] !== i + 1) return [nums[i], i + 1]
+    if (!res[0] && nums[i] !== nums1[i]) res[0] = nums[i];
+    if (!res[1] && i + 1 !== nums1[i]) res[1] = i + 1
+    if (res[0] && res[1]) break;
   }
+  return res
 };
 // @lc code=end
 
