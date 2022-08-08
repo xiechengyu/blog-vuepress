@@ -6952,30 +6952,40 @@ var findLengthOfLCIS = function (nums) {
 
 
 ## 680.验证回文字符串-ⅱ
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=680 lang=javascript
+ * @lc app=leetcode.cn id=680 lang=typescript
  *
  * [680] 验证回文字符串 Ⅱ
+ * 
+ * 给定一个非空字符串 s，最多删除一个字符。判断是否能成为回文字符串。
+
+ 
+
+示例 1:
+
+输入: s = "aba"
+输出: true
+示例 2:
+
+输入: s = "abca"
+输出: true
+解释: 你可以删除c字符。
+示例 3:
+
+输入: s = "abc"
+输出: false
+ 
  */
 
 // @lc code=start
-/**
- * @param {string} s
- * @return {boolean}
- */
-var validPalindrome = function (s) {
-  const str = s.split('');
-  for (let i = 0; i < s.length / 2; i++) {
-    let arr1 = str.slice(0), arr2 = str.slice(0);
-    arr1.splice(i, 1);
-    arr1 = arr1.reverse();
-    arr2.splice(i, 1);
-    const str1 = arr1.join(''), str2 = arr2.join('');
-    if (str1 === str2) return true;
+
+function validPalindrome(s: string, canDelete: boolean = true): boolean {
+  for (let left = 0, right = s.length - 1; left < right; left++, right--) {
+    if (s[left] !== s[right]) return canDelete && (validPalindrome(s.slice(left + 1, right + 1), false) || validPalindrome(s.slice(left, right), false));
   }
-  return false;
-};
+  return true;
+}
 // @lc code=end
 
 
@@ -8554,41 +8564,51 @@ var peakIndexInMountainArray = function (arr) {
 
 
 ## 859.亲密字符串
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=859 lang=javascript
+ * @lc app=leetcode.cn id=859 lang=typescript
  *
  * [859] 亲密字符串
+ * 
+ * 给你两个字符串 s 和 goal ，只要我们可以通过交换 s 中的两个字母得到与 goal 相等的结果，就返回 true ；否则返回 false 。
+
+交换字母的定义是：取两个下标 i 和 j （下标从 0 开始）且满足 i != j ，接着交换 s[i] 和 s[j] 处的字符。
+
+例如，在 "abcd" 中交换下标 0 和下标 2 的元素可以生成 "cbad" 。
+ 
+
+示例 1：
+
+输入：s = "ab", goal = "ba"
+输出：true
+解释：你可以交换 s[0] = 'a' 和 s[1] = 'b' 生成 "ba"，此时 s 和 goal 相等。
+示例 2：
+
+输入：s = "ab", goal = "ab"
+输出：false
+解释：你只能交换 s[0] = 'a' 和 s[1] = 'b' 生成 "ba"，此时 s 和 goal 不相等。
+示例 3：
+
+输入：s = "aa", goal = "aa"
+输出：true
+解释：你可以交换 s[0] = 'a' 和 s[1] = 'a' 生成 "aa"，此时 s 和 goal 相等。
+ 
  */
 
 // @lc code=start
-/**
- * @param {string} s
- * @param {string} goal
- * @return {boolean}
- */
-var buddyStrings = function (s, goal) {
-  if (s.length !== goal.length) return false
-  if (s === goal) {
-    if (s.length === 2 && s[0] !== s[1]) {
-      return false
-    }
-    return true
-  }
-  let num = 0, currS = "", currG = ""
+function buddyStrings(s: string, goal: string): boolean {
+  if (s.length !== goal.length) return false;
+  if (s === goal) return new Set(s.split("")).size !== s.length;
+  const arr: string[] = []
   for (let i = 0; i < s.length; i++) {
     if (s[i] !== goal[i]) {
-      if (!currS && !currG) {
-        currS = s[i];
-        currG = goal[i]
-      } else {
-        if (currS !== goal[i] || currG !== s[i]) return false
-      }
-      num++
+      arr.push(s[i])
+      arr.push(goal[i])
     }
-    if (num > 2) return false
+    if (arr.length > 4) return false
   }
-  return true
+  if (arr[0] === arr[3] && arr[1] === arr[2]) return true
+  return false
 };
 // @lc code=end
 
@@ -8597,37 +8617,65 @@ var buddyStrings = function (s, goal) {
 
 
 ## 860.柠檬水找零
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=860 lang=javascript
+ * @lc app=leetcode.cn id=860 lang=typescript
  *
  * [860] 柠檬水找零
+ * 
+ * 在柠檬水摊上，每一杯柠檬水的售价为 5 美元。顾客排队购买你的产品，（按账单 bills 支付的顺序）一次购买一杯。
+
+每位顾客只买一杯柠檬水，然后向你付 5 美元、10 美元或 20 美元。你必须给每个顾客正确找零，也就是说净交易是每位顾客向你支付 5 美元。
+
+注意，一开始你手头没有任何零钱。
+
+给你一个整数数组 bills ，其中 bills[i] 是第 i 位顾客付的账。如果你能给每位顾客正确找零，返回 true ，否则返回 false 。
+
+ 
+
+示例 1：
+
+输入：bills = [5,5,5,10,20]
+输出：true
+解释：
+前 3 位顾客那里，我们按顺序收取 3 张 5 美元的钞票。
+第 4 位顾客那里，我们收取一张 10 美元的钞票，并返还 5 美元。
+第 5 位顾客那里，我们找还一张 10 美元的钞票和一张 5 美元的钞票。
+由于所有客户都得到了正确的找零，所以我们输出 true。
+示例 2：
+
+输入：bills = [5,5,10,10,20]
+输出：false
+解释：
+前 2 位顾客那里，我们按顺序收取 2 张 5 美元的钞票。
+对于接下来的 2 位顾客，我们收取一张 10 美元的钞票，然后返还 5 美元。
+对于最后一位顾客，我们无法退回 15 美元，因为我们现在只有两张 10 美元的钞票。
+由于不是每位顾客都得到了正确的找零，所以答案是 false。
+ 
+
+
  */
 
 // @lc code=start
-/**
- * @param {number[]} bills
- * @return {boolean}
- */
-var lemonadeChange = function (bills) {
-  const map = new Map()
+function lemonadeChange(bills: number[]): boolean {
+  const map = new Map();
   for (let i = 0; i < bills.length; i++) {
-    map.set(bills[i], map.has(bills[i]) ? map.get(bills[i]) + 1 : 1)
-    const num5 = map.get(5) || 0, num10 = map.get(10) || 0
-    if (bills[i] === 10) {
-      if (num5 < 1) return false
-      map.set(5, num5 - 1)
-    } else if (bills[i] === 20) {
-      if (num5 > 2) {
-        map.set(5, num5 - 3)
-        continue
+    const f = map.get(5) || 0, t = map.get(10) || 0;
+    if (bills[i] === 5) {
+      map.set(5, f + 1);
+    } else if (bills[i] === 10) {
+      if (f === 0) return false
+      map.set(10, t + 1);
+      map.set(5, f - 1);
+    } else {
+      if (f === 0) return false
+      if (t !== 0) {
+        map.set(10, t - 1);
+        map.set(5, f - 1);
+      } else {
+        if (f < 3) return false
+        map.set(5, f - 3);
       }
-      if (num5 > 0 && num10 > 0) {
-        map.set(5, num5 - 1)
-        map.set(10, num10 - 1)
-        continue
-      }
-      return false
     }
   }
   return true
@@ -8890,28 +8938,42 @@ var sortArrayByParityII = function (nums) {
 
 
 ## 925.长按键入
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=925 lang=javascript
+ * @lc app=leetcode.cn id=925 lang=typescript
  *
  * [925] 长按键入
+ * 
+ * 你的朋友正在使用键盘输入他的名字 name。偶尔，在键入字符 c 时，按键可能会被长按，而字符可能被输入 1 次或多次。
+
+你将会检查键盘输入的字符 typed。如果它对应的可能是你的朋友的名字（其中一些字符可能被长按），那么就返回 True。
+
+ 
+
+示例 1：
+
+输入：name = "alex", typed = "aaleex"
+输出：true
+解释：'alex' 中的 'a' 和 'e' 被长按。
+示例 2：
+
+输入：name = "saeed", typed = "ssaaedd"
+输出：false
+解释：'e' 一定需要被键入两次，但在 typed 的输出中不是这样。
+ 
  */
 
 // @lc code=start
-/**
- * @param {string} name
- * @param {string} typed
- * @return {boolean}
- */
-var isLongPressedName = function (name, typed) {
-  let curr = 0
-  for (let i = 0; i < typed.length; i++) {
-    if (typed[i] === name[curr]) continue
-    if (typed[i] === name[curr + 1]) {
-      curr++
-      continue
+function isLongPressedName(name: string, typed: string): boolean {
+  let i1 = 0, i2 = 0
+  while (i1 < name.length || i2 < typed.length) {
+    if (name[i1] === typed[i2]) {
+      i1++
+      i2++
+    } else {
+      if (typed[i2] === name[i1 - 1]) i2++
+      else return false
     }
-    return false
   }
   return true
 };
@@ -9024,28 +9086,52 @@ var reorderLogFiles = function (logs) {
 
 
 ## 941.有效的山脉数组
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=941 lang=javascript
+ * @lc app=leetcode.cn id=941 lang=typescript
  *
  * [941] 有效的山脉数组
+ * 
+ * 给定一个整数数组 arr，如果它是有效的山脉数组就返回 true，否则返回 false。
+
+让我们回顾一下，如果 arr 满足下述条件，那么它是一个山脉数组：
+
+arr.length >= 3
+在 0 < i < arr.length - 1 条件下，存在 i 使得：
+arr[0] < arr[1] < ... arr[i-1] < arr[i] 
+arr[i] > arr[i+1] > ... > arr[arr.length - 1]
+ 
+
+
+
+ 
+
+示例 1：
+
+输入：arr = [2,1]
+输出：false
+示例 2：
+
+输入：arr = [3,5,5]
+输出：false
+示例 3：
+
+输入：arr = [0,3,2,1]
+输出：true
+ 
  */
 
 // @lc code=start
-/**
- * @param {number[]} arr
- * @return {boolean}
- */
-var validMountainArray = function (arr) {
+function validMountainArray(arr: number[]): boolean {
   if (arr.length < 3) return false
   const max = Math.max(...arr)
-  const index = arr.indexOf(max)
-  if (index !== arr.lastIndexOf(max)) return false
-  for (let i = 0; i < arr.length; i++) {
-    if (i < index) {
-      if (arr[i] >= arr[i + 1]) return false
-    } else if ((i > index)) {
-      if (arr[i] <= arr[i + 1]) return false
+  const maxI = arr.indexOf(max)
+  if (maxI === 0 || maxI === arr.length - 1) return false
+  for (let i = 1; i < arr.length; i++) {
+    if (i < maxI) {
+      if (arr[i] <= arr[i - 1]) return false
+    } else if (i > maxI) {
+      if (arr[i] >= arr[i - 1]) return false
     }
   }
   return true
