@@ -70,7 +70,8 @@ module.exports = config({
     },
 
     footer: {
-      copyright: "Copyright © 2018-present xiechengyu",
+      copyright: "Copyright © 2018 xiechengyu",
+      content: "<a  target='_blank' href='https://beian.miit.gov.cn'>京ICP备2022019675号-1</a>",
       display: true,
     },
 
