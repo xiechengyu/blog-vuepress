@@ -1,4 +1,4 @@
-await $`set -e`
+// await $`set -e`
 
 await $`rm -rf leetcode`
 

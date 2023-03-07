@@ -113,5 +113,8 @@
       },
       "comments": true
     }
+  },
+  "volta":{
+    "node":"16.17.1"
   }
 }
