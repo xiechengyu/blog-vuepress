@@ -6887,6 +6887,39 @@ var judgeCircle = function (moves) {
  * @lc app=leetcode.cn id=661 lang=typescript
  *
  * [661] 图片平滑器
+ * 
+ * 图像平滑器 是大小为 3 x 3 的过滤器，用于对图像的每个单元格平滑处理，平滑处理后单元格的值为该单元格的平均灰度。
+
+每个单元格的  平均灰度 定义为：该单元格自身及其周围的 8 个单元格的平均值，结果需向下取整。（即，需要计算蓝色平滑器中 9 个单元格的平均值）。
+
+如果一个单元格周围存在单元格缺失的情况，则计算平均灰度时不考虑缺失的单元格（即，需要计算红色平滑器中 4 个单元格的平均值）。
+
+
+
+给你一个表示图像灰度的 m x n 整数矩阵 img ，返回对图像的每个单元格平滑处理后的图像 。
+
+ 
+
+示例 1:
+
+
+
+输入:img = [[1,1,1],[1,0,1],[1,1,1]]
+输出:[[0, 0, 0],[0, 0, 0], [0, 0, 0]]
+解释:
+对于点 (0,0), (0,2), (2,0), (2,2): 平均(3/4) = 平均(0.75) = 0
+对于点 (0,1), (1,0), (1,2), (2,1): 平均(5/6) = 平均(0.83333333) = 0
+对于点 (1,1): 平均(8/9) = 平均(0.88888889) = 0
+示例 2:
+
+
+输入: img = [[100,200,100],[200,50,200],[100,200,100]]
+输出: [[137,141,137],[141,138,141],[137,141,137]]
+解释:
+对于点 (0,0), (0,2), (2,0), (2,2): floor((100+200+200+50)/4) = floor(137.5) = 137
+对于点 (0,1), (1,0), (1,2), (2,1): floor((200+200+50+200+100+100)/6) = floor(141.666667) = 141
+对于点 (1,1): floor((50+200+200+200+200+100+100+100+100)/9) = floor(138.888889) = 138
+ 
  */
 
 // @lc code=start
@@ -7133,14 +7166,53 @@ function hasAlternatingBits(n: number): boolean {
  * @lc app=leetcode.cn id=696 lang=typescript
  *
  * [696] 计数二进制子串
+ * 
+ * 给定一个字符串 s，统计并返回具有相同数量 0 和 1 的非空（连续）子字符串的数量，并且这些子字符串中的所有 0 和所有 1 都是成组连续的。
+
+重复出现（不同位置）的子串也要统计它们出现的次数。
+
+ 
+示例 1：
+
+输入：s = "00110011"
+输出：6
+解释：6 个子串满足具有相同数量的连续 1 和 0 ："0011"、"01"、"1100"、"10"、"0011" 和 "01" 。
+注意，一些重复出现的子串（不同位置）要统计它们出现的次数。
+另外，"00110011" 不是有效的子串，因为所有的 0（还有 1 ）没有组合在一起。
+示例 2：
+
+输入：s = "10101"
+输出：4
+解释：有 4 个子串："10"、"01"、"10"、"01" ，具有相同数量的连续 1 和 0 。
+ 
  */
 
 // @lc code=start
 function countBinarySubstrings(s: string): number {
-
-};
+  let res = 0,
+    left = 1,
+    right = 0;
+  for (let i = 1; i < s.length; i++) {
+    if (right === 0) {
+      if (s[i] === s[i - 1]) {
+        left++;
+      } else {
+        right++;
+      }
+    } else {
+      if (s[i] === s[i - 1]) {
+        right++;
+      } else {
+        res += Math.min(left, right);
+        left = right;
+        right = 1;
+      }
+    }
+  }
+  res += Math.min(left, right);
+  return res;
+}
 // @lc code=end
-
 
 ```
 
@@ -7161,6 +7233,126 @@ function countBinarySubstrings(s: string): number {
 var findShortestSubArray = function(nums) {
 
 };
+// @lc code=end
+
+
+```
+
+
+## 697.数组的度
+```ts
+/*
+ * @lc app=leetcode.cn id=697 lang=typescript
+ *
+ * [697] 数组的度
+ * 
+ * 给定一个非空且只包含非负数的整数数组 nums，数组的 度 的定义是指数组里任一元素出现频数的最大值。
+
+你的任务是在 nums 中找到与 nums 拥有相同大小的度的最短连续子数组，返回其长度。
+
+ 
+
+示例 1：
+
+输入：nums = [1,2,2,3,1]
+输出：2
+解释：
+输入数组的度是 2 ，因为元素 1 和 2 的出现频数最大，均为 2 。
+连续子数组里面拥有相同度的有如下所示：
+[1, 2, 2, 3, 1], [1, 2, 2, 3], [2, 2, 3, 1], [1, 2, 2], [2, 2, 3], [2, 2]
+最短连续子数组 [2, 2] 的长度为 2 ，所以返回 2 。
+示例 2：
+
+输入：nums = [1,2,2,3,1,4,2]
+输出：6
+解释：
+数组的度是 3 ，因为元素 2 重复出现 3 次。
+所以 [2,2,3,1,4,2] 是最短子数组，因此返回 6 。
+ 
+ */
+
+// @lc code=start
+function findShortestSubArray(nums: number[]): number {
+  const map1 = new Map(),
+    map2 = new Map(),
+    map3 = new Map();
+  let res = Number.MAX_VALUE,max = 0;
+  for (let i = 0; i < nums.length; i++) {
+    if (!map1.has(nums[i])) {
+      map1.set(nums[i], 1);
+      map2.set(nums[i], i);
+    } else {
+      map1.set(nums[i], map1.get(nums[i]) + 1);
+    }
+    map3.set(nums[i], i);
+    max = Math.max(max,map1.get(nums[i]))
+  }
+  const arr:any[] = []
+  for (const [k,v] of map1.entries()) {
+    if(v===max) arr.push(k)
+  }
+  for (let i = 0; i < arr.length; i++) {
+    res = Math.min(res,map3.get(arr[i])-map2.get(arr[i])+1)
+  }
+  return res;
+}
+// @lc code=end
+
+```
+
+
+## 703.数据流中的第-k-大元素
+```ts
+/*
+ * @lc app=leetcode.cn id=703 lang=typescript
+ *
+ * [703] 数据流中的第 K 大元素
+ * 
+ * 设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+
+请实现 KthLargest 类：
+
+KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。
+int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。
+ 
+
+示例：
+
+输入：
+["KthLargest", "add", "add", "add", "add", "add"]
+[[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+输出：
+[null, 4, 5, 5, 8, 8]
+
+解释：
+KthLargest kthLargest = new KthLargest(3, [4, 5, 8, 2]);
+kthLargest.add(3);   // return 4
+kthLargest.add(5);   // return 5
+kthLargest.add(10);  // return 5
+kthLargest.add(9);   // return 8
+kthLargest.add(4);   // return 8
+ 
+ */
+
+// @lc code=start
+class KthLargest {
+    nums:number[];
+    k:number;
+    constructor(k: number, nums: number[]) {
+      this.nums = nums;
+      this.k = k;
+    }
+    add(val: number): number {
+      this.nums = [...this.nums,val].sort((a,b)=>b-a);
+      return this.nums[this.k-1]
+    }
+}
+
+/**
+ * Your KthLargest object will be instantiated and called as such:
+ * var obj = new KthLargest(k, nums)
+ * var param_1 = obj.add(val)
+ */
 // @lc code=end
 
 
