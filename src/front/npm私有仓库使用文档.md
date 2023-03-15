@@ -1,5 +1,5 @@
 ---
-title: npm私有仓库搭建文档
+title: npm私有仓库使用文档
 date: 2019-6-5 11:36:17
 tags: ["基础架构"]
 category: 前端
