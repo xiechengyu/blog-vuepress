@@ -7617,6 +7617,29 @@ var toLowerCase = function (s) {
 ```
 
 
+## 717.1-比特与-2-比特字符
+```ts
+/*
+ * @lc app=leetcode.cn id=717 lang=typescript
+ *
+ * [717] 1 比特与 2 比特字符
+ */
+
+// @lc code=start
+function isOneBitCharacter(bits: number[]): boolean {
+  while (bits.length > 1) {
+    if (bits[0] === 1) {
+      bits.shift();
+    }
+    bits.shift();
+  }
+  return bits.length === 1
+}
+// @lc code=end
+
+```
+
+
 ## 720.词典中最长的单词
 ```js
 /*
@@ -7775,6 +7798,52 @@ var floodFill = function(image, sr, sc, newColor) {
 };
 // @lc code=end
 
+
+```
+
+
+## 733.图像渲染
+```ts
+/*
+ * @lc app=leetcode.cn id=733 lang=typescript
+ *
+ * [733] 图像渲染
+ */
+
+// @lc code=start
+function floodFill(
+  image: number[][],
+  sr: number,
+  sc: number,
+  color: number
+): number[][] {
+  const arr: any[] = [],
+    l = image[sr][sc];
+  if (l === color) return image;
+  arr.push({ sr, sc });
+  image[sr][sc] = color;
+  while (arr.length > 0) {
+    const node = arr.shift();
+    if (image[node.sr][node.sc - 1] === l) {
+      image[node.sr][node.sc - 1] = color;
+      arr.push({ sr: node.sr, sc: node.sc - 1 });
+    }
+    if (image[node.sr][node.sc + 1] === l) {
+      image[node.sr][node.sc + 1] = color;
+      arr.push({ sr: node.sr, sc: node.sc + 1 });
+    }
+    if (image[node.sr - 1] && image[node.sr - 1][node.sc] === l) {
+      image[node.sr - 1][node.sc] = color;
+      arr.push({ sr: node.sr - 1, sc: node.sc });
+    }
+    if (image[node.sr + 1] && image[node.sr + 1][node.sc] === l) {
+      image[node.sr + 1][node.sc] = color;
+      arr.push({ sr: node.sr + 1, sc: node.sc });
+    }
+  }
+  return image;
+}
+// @lc code=end
 
 ```
 
@@ -8089,6 +8158,28 @@ var isToeplitzMatrix = function(matrix) {
 };
 // @lc code=end
 
+
+```
+
+
+## 766.托普利茨矩阵
+```ts
+/*
+ * @lc app=leetcode.cn id=766 lang=typescript
+ *
+ * [766] 托普利茨矩阵
+ */
+
+// @lc code=start
+function isToeplitzMatrix(matrix: number[][]): boolean {
+  for (let i = 0; i < matrix.length - 1; i++) {
+    for (let j = 0; j < matrix[i].length - 1; j++) {
+      if (matrix[i][j] !== matrix[i + 1][j + 1]) return false;
+    }
+  }
+  return true;
+}
+// @lc code=end
 
 ```
 
