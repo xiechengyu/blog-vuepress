@@ -9001,6 +9001,138 @@ function lemonadeChange(bills: number[]): boolean {
 ```
 
 
+## 867.转置矩阵
+```ts
+/*
+ * @lc app=leetcode.cn id=867 lang=typescript
+ *
+ * [867] 转置矩阵
+ */
+
+// @lc code=start
+function transpose(matrix: number[][]): number[][] {
+  const res: number[][] = [];
+  while (res.length < matrix[0].length) {
+    res.push([]);
+  }
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix[i].length; j++) {
+      res[j][i] = matrix[i][j];
+    }
+  }
+  return res;
+}
+// @lc code=end
+
+```
+
+
+## 868.二进制间距
+```ts
+/*
+ * @lc app=leetcode.cn id=868 lang=typescript
+ *
+ * [868] 二进制间距
+ */
+
+// @lc code=start
+// function binaryGap(n: number): number {
+//   const s = n.toString(2),
+//     arr: number[] = [];
+//   for (let i = 0; i < s.length; i++) {
+//     if (s[i] === "1") arr.push(i);
+//   }
+//   if (arr.length < 2) return 0;
+//   let max = 0;
+//   for (let i = 1; i < arr.length; i++) {
+//     max = Math.max(max, arr[i] - arr[i - 1]);
+//   }
+//   return max;
+// }
+
+function binaryGap(n: number): number {
+  const s = n.toString(2),
+    arr: number[] = [];
+  let max = 0;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === "1") {
+      const last = arr.shift();
+      if (last || last === 0) max = Math.max(max, i - last);
+      arr.push(i);
+    }
+  }
+  return max;
+}
+// @lc code=end
+
+```
+
+
+## 876.链表的中间结点
+```ts
+/*
+ * @lc app=leetcode.cn id=876 lang=typescript
+ *
+ * [876] 链表的中间结点
+ */
+
+// @lc code=start
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+function middleNode(head: ListNode | null): ListNode | null {
+  const arr: any[] = [];
+  while (head) {
+    arr.push(head);
+    head = head.next;
+  }
+  return arr[Math.floor(arr.length / 2)];
+}
+// @lc code=end
+
+```
+
+
+## 883.三维形体投影面积
+```ts
+/*
+ * @lc app=leetcode.cn id=883 lang=typescript
+ *
+ * [883] 三维形体投影面积
+ */
+
+// @lc code=start
+function projectionArea(grid: number[][]): number {
+  let x = 0,
+    y = 0,
+    z = 0;
+  const map = new Map();
+  for (let i = 0; i < grid.length; i++) {
+    x += Math.max(...grid[i]);
+    for (let j = 0; j < grid[i].length; j++) {
+      if (grid[i][j]) z++;
+      map.set(j, map.has(j) ? Math.max(map.get(j), grid[i][j]) : grid[i][j]);
+    }
+  }
+  for (const v of map.values()) {
+    y += v;
+  }
+  return x + y + z;
+}
+// @lc code=end
+
+```
+
+
 ## 884.两句话中的不常见单词
 ```js
 /*
@@ -9053,6 +9185,37 @@ var fairCandySwap = function (aliceSizes, bobSizes) {
 };
 // @lc code=end
 
+
+```
+
+
+## 892.三维形体的表面积
+```ts
+/*
+ * @lc app=leetcode.cn id=892 lang=typescript
+ *
+ * [892] 三维形体的表面积
+ */
+
+// @lc code=start
+function surfaceArea(grid: number[][]): number {
+  let x = 0,
+    y = 0,
+    z = 0,
+    v = 0;
+  const map = new Map();
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
+      v += grid[i][j];
+      if (j < grid[i].length - 1) x += Math.min(grid[i][j], grid[i][j + 1]);
+      if (grid[i][j]) z += grid[i][j] - 1;
+      if (map.has(j)) y += Math.min(map.get(j), grid[i][j]);
+      map.set(j, grid[i][j]);
+    }
+  }
+  return 6 * v - (x + y + z) * 2;
+}
+// @lc code=end
 
 ```
 
