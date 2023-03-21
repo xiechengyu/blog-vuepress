@@ -7621,6 +7621,28 @@ var toLowerCase = function (s) {
 ```ts
 /*
  * @lc app=leetcode.cn id=717 lang=typescript
+
+有两种特殊字符：
+
+第一种字符可以用一比特 0 表示
+第二种字符可以用两比特（10 或 11）表示
+给你一个以 0 结尾的二进制数组 bits ，如果最后一个字符必须是一个一比特字符，则返回 true 。
+
+ 
+
+示例 1:
+
+输入: bits = [1, 0, 0]
+输出: true
+解释: 唯一的解码方式是将其解析为一个两比特字符和一个一比特字符。
+所以最后一个字符是一比特字符。
+示例 2:
+
+输入：bits = [1,1,1,0]
+输出：false
+解释：唯一的解码方式是将其解析为两比特字符和两比特字符。
+所以最后一个字符不是一比特字符。
+ 
  *
  * [717] 1 比特与 2 比特字符
  */
@@ -7778,34 +7800,33 @@ var selfDividingNumbers = function (left, right) {
 
 
 ## 733.图像渲染
-```js
-/*
- * @lc app=leetcode.cn id=733 lang=javascript
- *
- * [733] 图像渲染
- */
-
-// @lc code=start
-/**
- * @param {number[][]} image
- * @param {number} sr
- * @param {number} sc
- * @param {number} newColor
- * @return {number[][]}
- */
-var floodFill = function(image, sr, sc, newColor) {
-
-};
-// @lc code=end
-
-
-```
-
-
-## 733.图像渲染
 ```ts
 /*
  * @lc app=leetcode.cn id=733 lang=typescript
+
+有一幅以 m x n 的二维整数数组表示的图画 image ，其中 image[i][j] 表示该图画的像素值大小。
+
+你也被给予三个整数 sr ,  sc 和 newColor 。你应该从像素 image[sr][sc] 开始对图像进行 上色填充 。
+
+为了完成 上色工作 ，从初始像素开始，记录初始坐标的 上下左右四个方向上 像素值与初始坐标相同的相连像素点，接着再记录这四个方向上符合条件的像素点与他们对应 四个方向上 像素值与初始坐标相同的相连像素点，……，重复该过程。将所有有记录的像素点的颜色值改为 newColor 。
+
+最后返回 经过上色渲染后的图像 。
+
+ 
+
+示例 1:
+
+
+
+输入: image = [[1,1,1],[1,1,0],[1,0,1]]，sr = 1, sc = 1, newColor = 2
+输出: [[2,2,2],[2,2,0],[2,0,1]]
+解析: 在图像的正中间，(坐标(sr,sc)=(1,1)),在路径上所有符合条件的像素点的颜色都被更改成2。
+注意，右下角的像素没有更改为2，因为它不是在上下左右四个方向上与初始点相连的像素点。
+示例 2:
+
+输入: image = [[0,0,0],[0,0,0]], sr = 0, sc = 0, newColor = 2
+输出: [[2,2,2],[2,2,2]]
+ 
  *
  * [733] 图像渲染
  */
@@ -8166,6 +8187,30 @@ var isToeplitzMatrix = function(matrix) {
 ```ts
 /*
  * @lc app=leetcode.cn id=766 lang=typescript
+
+给你一个 m x n 的矩阵 matrix 。如果这个矩阵是托普利茨矩阵，返回 true ；否则，返回 false 。
+
+如果矩阵上每一条由左上到右下的对角线上的元素都相同，那么这个矩阵是 托普利茨矩阵 。
+
+ 
+
+示例 1：
+
+
+输入：matrix = [[1,2,3,4],[5,1,2,3],[9,5,1,2]]
+输出：true
+解释：
+在上述矩阵中, 其对角线为: 
+"[9]", "[5, 5]", "[1, 1, 1]", "[2, 2, 2]", "[3, 3]", "[4]"。 
+各条对角线上的所有元素均相同, 因此答案是 True 。
+示例 2：
+
+
+输入：matrix = [[1,2],[2,2]]
+输出：false
+解释：
+对角线 "[1, 2]" 上的元素不同。
+ 
  *
  * [766] 托普利茨矩阵
  */
@@ -9005,6 +9050,24 @@ function lemonadeChange(bills: number[]): boolean {
 ```ts
 /*
  * @lc app=leetcode.cn id=867 lang=typescript
+
+给你一个二维整数数组 matrix， 返回 matrix 的 转置矩阵 。
+
+矩阵的 转置 是指将矩阵的主对角线翻转，交换矩阵的行索引与列索引。
+
+
+
+ 
+
+示例 1：
+
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[[1,4,7],[2,5,8],[3,6,9]]
+示例 2：
+
+输入：matrix = [[1,2,3],[4,5,6]]
+输出：[[1,4],[2,5],[3,6]]
+ 
  *
  * [867] 转置矩阵
  */
@@ -9106,6 +9169,35 @@ function middleNode(head: ListNode | null): ListNode | null {
 ```ts
 /*
  * @lc app=leetcode.cn id=883 lang=typescript
+
+在 n x n 的网格 grid 中，我们放置了一些与 x，y，z 三轴对齐的 1 x 1 x 1 立方体。
+
+每个值 v = grid[i][j] 表示 v 个正方体叠放在单元格 (i, j) 上。
+
+现在，我们查看这些立方体在 xy 、yz 和 zx 平面上的投影。
+
+投影 就像影子，将 三维 形体映射到一个 二维 平面上。从顶部、前面和侧面看立方体时，我们会看到“影子”。
+
+返回 所有三个投影的总面积 。
+
+ 
+
+示例 1：
+
+
+
+输入：[[1,2],[3,4]]
+输出：17
+解释：这里有该形体在三个轴对齐平面上的三个投影(“阴影部分”)。
+示例 2:
+
+输入：grid = [[2]]
+输出：5
+示例 3：
+
+输入：[[1,0],[0,2]]
+输出：8
+ 
  *
  * [883] 三维形体投影面积
  */
@@ -9193,6 +9285,33 @@ var fairCandySwap = function (aliceSizes, bobSizes) {
 ```ts
 /*
  * @lc app=leetcode.cn id=892 lang=typescript
+
+给你一个 n * n 的网格 grid ，上面放置着一些 1 x 1 x 1 的正方体。每个值 v = grid[i][j] 表示 v 个正方体叠放在对应单元格 (i, j) 上。
+
+放置好正方体后，任何直接相邻的正方体都会互相粘在一起，形成一些不规则的三维形体。
+
+请你返回最终这些形体的总表面积。
+
+注意：每个形体的底面也需要计入表面积中。
+
+ 
+
+示例 1：
+
+
+输入：grid = [[1,2],[3,4]]
+输出：34
+示例 2：
+
+
+输入：grid = [[1,1,1],[1,0,1],[1,1,1]]
+输出：32
+示例 3：
+
+
+输入：grid = [[2,2,2],[2,1,2],[2,2,2]]
+输出：46
+ 
  *
  * [892] 三维形体的表面积
  */
@@ -10053,6 +10172,52 @@ var largestSumAfterKNegations = function (nums, k) {
 ```
 
 
+## 1009.十进制整数的反码
+```ts
+/*
+ * @lc app=leetcode.cn id=1009 lang=typescript
+每个非负整数 N 都有其二进制表示。例如， 5 可以被表示为二进制 "101"，11 可以用二进制 "1011" 表示，依此类推。注意，除 N = 0 外，任何二进制表示中都不含前导零。
+
+二进制的反码表示是将每个 1 改为 0 且每个 0 变为 1。例如，二进制数 "101" 的二进制反码为 "010"。
+
+给你一个十进制数 N，请你返回其二进制表示的反码所对应的十进制整数。
+
+ 
+
+示例 1：
+
+输入：5
+输出：2
+解释：5 的二进制表示为 "101"，其二进制反码为 "010"，也就是十进制中的 2 。
+示例 2：
+
+输入：7
+输出：0
+解释：7 的二进制表示为 "111"，其二进制反码为 "000"，也就是十进制中的 0 。
+示例 3：
+
+输入：10
+输出：5
+解释：10 的二进制表示为 "1010"，其二进制反码为 "0101"，也就是十进制中的 5 。
+ 
+ *
+ * [1009] 十进制整数的反码
+ */
+
+// @lc code=start
+function bitwiseComplement(n: number): number {
+  const s = n.toString(2);
+  let res = "";
+  for (let i = 0; i < s.length; i++) {
+    res += s[i] === "1" ? "0" : "1";
+  }
+  return parseInt(res, 2);
+}
+// @lc code=end
+
+```
+
+
 ## 1013.将数组分成和相等的三个部分
 ```js
 /*
@@ -10080,6 +10245,56 @@ var canThreePartsEqualSum = function (arr) {
   return time >= 3
 };
 // @lc code=end
+```
+
+
+## 1018.可被-5-整除的二进制前缀
+```ts
+/*
+ * @lc app=leetcode.cn id=1018 lang=typescript
+ *
+ * [1018] 可被 5 整除的二进制前缀
+ * 
+ * 给定一个二进制数组 nums ( 索引从0开始 )。
+
+我们将xi 定义为其二进制表示形式为子数组 nums[0..i] (从最高有效位到最低有效位)。
+
+例如，如果 nums =[1,0,1] ，那么 x0 = 1, x1 = 2, 和 x2 = 5。
+返回布尔值列表 answer，只有当 xi 可以被 5 整除时，答案 answer[i] 为 true，否则为 false。
+
+ 
+
+示例 1：
+
+输入：nums = [0,1,1]
+输出：[true,false,false]
+解释：
+输入数字为 0, 01, 011；也就是十进制中的 0, 1, 3 。只有第一个数可以被 5 整除，因此 answer[0] 为 true 。
+示例 2：
+
+输入：nums = [1,1,1]
+输出：[false,false,false]
+ 
+ */
+
+// @lc code=start
+function prefixesDivBy5(nums: number[]): boolean[] {
+  const res: boolean[] = [];
+  let s = 0;
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] === 0) {
+      s *= 2;
+    } else {
+      s = s * 2 + 1;
+    }
+    res.push(s % 5 === 0);
+    s > 9 && (s -= 10);
+  }
+  return res;
+}
+
+// @lc code=end
+
 ```
 
 
@@ -10164,6 +10379,47 @@ var allCellsDistOrder = function (rows, cols, rCenter, cCenter) {
 };
 // @lc code=end
 
+
+```
+
+
+## 1037.有效的回旋镖
+```ts
+/*
+ * @lc app=leetcode.cn id=1037 lang=typescript
+ *
+ * [1037] 有效的回旋镖
+ * 
+ * 给定一个数组 points ，其中 points[i] = [xi, yi] 表示 X-Y 平面上的一个点，如果这些点构成一个 回旋镖 则返回 true 。
+
+回旋镖 定义为一组三个点，这些点 各不相同 且 不在一条直线上 。
+
+ 
+
+示例 1：
+
+输入：points = [[1,1],[2,3],[3,2]]
+输出：true
+示例 2：
+
+输入：points = [[1,1],[2,2],[3,3]]
+输出：false
+ 
+ */
+
+// @lc code=start
+function isBoomerang(points: number[][]): boolean {
+  if (
+    (points[0][0] === points[1][0] && points[1][0] === points[2][0]) ||
+    (points[0][1] === points[1][1] && points[1][1] === points[2][1])
+  )
+    return false;
+  const k1 = (points[1][0] - points[0][0]) / (points[1][1] - points[0][1]),
+    k2 = (points[2][0] - points[0][0]) / (points[2][1] - points[0][1]);
+  if (Number.isNaN(k1) || Number.isNaN(k2)) return false;
+  return k1 !== k2;
+}
+// @lc code=end
 
 ```
 
@@ -10751,6 +11007,64 @@ var minCostToMoveChips = function(position) {
 };
 // @lc code=end
 
+
+```
+
+
+## 1217.玩筹码
+```ts
+/*
+ * @lc app=leetcode.cn id=1217 lang=typescript
+ *
+ * [1217] 玩筹码
+ * 
+ * 有 n 个筹码。第 i 个筹码的位置是 position[i] 。
+
+我们需要把所有筹码移到同一个位置。在一步中，我们可以将第 i 个筹码的位置从 position[i] 改变为:
+
+position[i] + 2 或 position[i] - 2 ，此时 cost = 0
+position[i] + 1 或 position[i] - 1 ，此时 cost = 1
+返回将所有筹码移动到同一位置上所需要的 最小代价 。
+
+ 
+
+示例 1：
+
+
+
+输入：position = [1,2,3]
+输出：1
+解释：第一步:将位置3的筹码移动到位置1，成本为0。
+第二步:将位置2的筹码移动到位置1，成本= 1。
+总成本是1。
+示例 2：
+
+
+
+输入：position = [2,2,2,3,3]
+输出：2
+解释：我们可以把位置3的两个筹码移到位置2。每一步的成本为1。总成本= 2。
+示例 3:
+
+输入：position = [1,1000000000]
+输出：1
+ 
+ */
+
+// @lc code=start
+function minCostToMoveChips(position: number[]): number {
+  let j = 0,
+    o = 0;
+  for (let i = 0; i < position.length; i++) {
+    if (position[i] % 2 === 0) {
+      o++;
+    } else {
+      j++;
+    }
+  }
+  return Math.min(j, o);
+}
+// @lc code=end
 
 ```
 
