@@ -1509,36 +1509,6 @@ var maxDepth = function (root) {
 
 
 ## 108.将有序数组转换为二叉搜索树
-```js
-/*
- * @lc app=leetcode.cn id=108 lang=javascript
- *
- * [108] 将有序数组转换为二叉搜索树
- */
-
-// @lc code=start
-/**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
- * }
- */
-/**
- * @param {number[]} nums
- * @return {TreeNode}
- */
-var sortedArrayToBST = function(nums) {
-
-};
-// @lc code=end
-
-
-```
-
-
-## 108.将有序数组转换为二叉搜索树
 ```ts
 /*
  * @lc app=leetcode.cn id=108 lang=typescript
@@ -1597,28 +1567,61 @@ function sortedArrayToBST(nums: number[]): TreeNode | null {
 
 
 ## 110.平衡二叉树
-```js
+```ts
 /*
- * @lc app=leetcode.cn id=110 lang=javascript
+ * @lc app=leetcode.cn id=110 lang=typescript
  *
  * [110] 平衡二叉树
+ * 
+ * 给定一个二叉树，判断它是否是高度平衡的二叉树。
+
+本题中，一棵高度平衡二叉树定义为：
+
+一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
+
+ 
+
+示例 1：
+
+
+输入：root = [3,9,20,null,null,15,7]
+输出：true
+示例 2：
+
+
+输入：root = [1,2,2,3,3,null,null,4,4]
+输出：false
+示例 3：
+
+输入：root = []
+输出：true
+ 
  */
 
 // @lc code=start
 /**
  * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
  * }
  */
-/**
- * @param {TreeNode} root
- * @return {boolean}
- */
-var isBalanced = function(root) {
 
+function isBalanced(root: TreeNode | null): boolean {
+  function helper(node: TreeNode | null): number {
+    if (!node) return 0;
+    let l = helper(node.left);
+    let r = helper(node.right);
+    if (l < 0 || r < 0 || Math.abs(l - r) > 1) return -1;
+    return Math.max(l, r) + 1;
+  }
+  return helper(root) !== -1;
 };
 // @lc code=end
 
@@ -4728,28 +4731,6 @@ function sumOfLeftLeaves(root: TreeNode | null, isLeftNode = false): number {
 
 
 ## 405.数字转换为十六进制数
-```js
-/*
- * @lc app=leetcode.cn id=405 lang=javascript
- *
- * [405] 数字转换为十六进制数
- */
-
-// @lc code=start
-/**
- * @param {number} num
- * @return {string}
- */
-var toHex = function(num) {
-
-};
-// @lc code=end
-
-
-```
-
-
-## 405.数字转换为十六进制数
 ```ts
 /*
  * @lc app=leetcode.cn id=405 lang=typescript
@@ -7218,28 +7199,6 @@ function countBinarySubstrings(s: string): number {
 
 
 ## 697.数组的度
-```js
-/*
- * @lc app=leetcode.cn id=697 lang=javascript
- *
- * [697] 数组的度
- */
-
-// @lc code=start
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var findShortestSubArray = function(nums) {
-
-};
-// @lc code=end
-
-
-```
-
-
-## 697.数组的度
 ```ts
 /*
  * @lc app=leetcode.cn id=697 lang=typescript
@@ -7658,28 +7617,6 @@ function isOneBitCharacter(bits: number[]): boolean {
   return bits.length === 1
 }
 // @lc code=end
-
-```
-
-
-## 720.词典中最长的单词
-```js
-/*
- * @lc app=leetcode.cn id=720 lang=javascript
- *
- * [720] 词典中最长的单词
- */
-
-// @lc code=start
-/**
- * @param {string[]} words
- * @return {string}
- */
-var longestWord = function(words) {
-
-};
-// @lc code=end
-
 
 ```
 
@@ -8157,28 +8094,6 @@ var isPrime = function (num, map) {
   return map.get(num);
 };
 // @lc code=end
-
-```
-
-
-## 766.托普利茨矩阵
-```js
-/*
- * @lc app=leetcode.cn id=766 lang=javascript
- *
- * [766] 托普利茨矩阵
- */
-
-// @lc code=start
-/**
- * @param {number[][]} matrix
- * @return {boolean}
- */
-var isToeplitzMatrix = function(matrix) {
-
-};
-// @lc code=end
-
 
 ```
 
@@ -9806,29 +9721,6 @@ var minDeletionSize = function (strs) {
 ```
 
 
-## 953.验证外星语词典
-```js
-/*
- * @lc app=leetcode.cn id=953 lang=javascript
- *
- * [953] 验证外星语词典
- */
-
-// @lc code=start
-/**
- * @param {string[]} words
- * @param {string} order
- * @return {boolean}
- */
-var isAlienSorted = function(words, order) {
-
-};
-// @lc code=end
-
-
-```
-
-
 ## 961.在长度-2-n-的数组中找出重复-n-次的元素
 ```js
 /*
@@ -10812,28 +10704,6 @@ var countCharacters = function (words, chars) {
 ```
 
 
-## 1175.质数排列
-```js
-/*
- * @lc app=leetcode.cn id=1175 lang=javascript
- *
- * [1175] 质数排列
- */
-
-// @lc code=start
-/**
- * @param {number} n
- * @return {number}
- */
-var numPrimeArrangements = function(n) {
-
-};
-// @lc code=end
-
-
-```
-
-
 ## 1184.公交站间的距离
 ```js
 /*
@@ -10982,28 +10852,6 @@ var uniqueOccurrences = function (arr) {
     curr = 0
   }
   return true
-};
-// @lc code=end
-
-
-```
-
-
-## 1217.玩筹码
-```js
-/*
- * @lc app=leetcode.cn id=1217 lang=javascript
- *
- * [1217] 玩筹码
- */
-
-// @lc code=start
-/**
- * @param {number[]} position
- * @return {number}
- */
-var minCostToMoveChips = function(position) {
-
 };
 // @lc code=end
 
