@@ -10037,6 +10037,55 @@ var minDeletionSize = function (strs) {
 ```
 
 
+## 953.验证外星语词典
+```ts
+/*
+ * @lc app=leetcode.cn id=953 lang=typescript
+ *
+ * [953] 验证外星语词典
+ * 
+ * 某种外星语也使用英文小写字母，但可能顺序 order 不同。字母表的顺序（order）是一些小写字母的排列。
+
+给定一组用外星语书写的单词 words，以及其字母表的顺序 order，只有当给定的单词在这种外星语中按字典序排列时，返回 true；否则，返回 false。
+
+ 
+
+示例 1：
+
+输入：words = ["hello","leetcode"], order = "hlabcdefgijkmnopqrstuvwxyz"
+输出：true
+解释：在该语言的字母表中，'h' 位于 'l' 之前，所以单词序列是按字典序排列的。
+示例 2：
+
+输入：words = ["word","world","row"], order = "worldabcefghijkmnpqstuvxyz"
+输出：false
+解释：在该语言的字母表中，'d' 位于 'l' 之后，那么 words[0] > words[1]，因此单词序列不是按字典序排列的。
+示例 3：
+
+输入：words = ["apple","app"], order = "abcdefghijklmnopqrstuvwxyz"
+输出：false
+解释：当前三个字符 "app" 匹配时，第二个字符串相对短一些，然后根据词典编纂规则 "apple" > "app"，因为 'l' > '∅'，其中 '∅' 是空白字符，定义为比任何其他字符都小（更多信息）。
+ 
+ */
+
+// @lc code=start
+function isAlienSorted(words: string[], order: string): boolean {
+  const alphabets = new Map();
+  for(let i = 0; i < order.length; i++){
+      alphabets.set(order[i], String.fromCharCode(i+97))
+  }
+  const transformWord = (word: string)=> word.split('').map(alp => alphabets.get(alp)).join('')
+  for(let i = 1; i < words.length; i++){
+      if(transformWord(words[i-1]) > transformWord(words[i])) return false
+  }
+  return true
+};
+// @lc code=end
+
+
+```
+
+
 ## 961.在长度-2-n-的数组中找出重复-n-次的元素
 ```js
 /*
@@ -11587,6 +11636,87 @@ var countCharacters = function (words, chars) {
 ```
 
 
+## 1175.质数排列
+```ts
+/*
+ * @lc app=leetcode.cn id=1175 lang=typescript
+ *
+ * [1175] 质数排列
+ * 
+ * 请你帮忙给从 1 到 n 的数设计排列方案，使得所有的「质数」都应该被放在「质数索引」（索引从 1 开始）上；你需要返回可能的方案总数。
+
+让我们一起来回顾一下「质数」：质数一定是大于 1 的，并且不能用两个小于它的正整数的乘积来表示。
+
+由于答案可能会很大，所以请你返回答案 模 mod 10^9 + 7 之后的结果即可。
+
+ 
+
+示例 1：
+
+输入：n = 5
+输出：12
+解释：举个例子，[1,2,5,4,3] 是一个有效的排列，但 [5,2,3,4,1] 不是，因为在第二种情况里质数 5 被错误地放在索引为 1 的位置上。
+示例 2：
+
+输入：n = 100
+输出：682289015
+ 
+ */
+
+// @lc code=start
+
+const primeArr:number[] = []
+
+const MOD = 10 ** 9 + 7;
+
+function numPrimeArrangements(n: number): number {
+  let count = 0;
+  for (let i = 1; i <= n; i++) {
+    if (isPrime(i)) count++;
+  }
+  let res = 1;
+  let m = n - count;
+  while (count > 0) {
+      res = res % MOD;
+      res *= count;
+      count--;
+  }
+  while (m > 0) {
+      res = res % MOD;
+      res *= m;
+      m--;
+  }
+  return res;
+}
+
+function factorial(n: number): number {
+  let res = 1;
+  for (let i = 1; i <= n; i++) {
+    res = (res * i) % MOD;
+  }
+  return res;
+}
+
+function isPrime(n: number): boolean {
+  if(primeArr.includes(n)) return true
+  if (n <= 1) return false;
+  if (n <= 3) {
+    primeArr.push(n)
+    return true;
+  };
+  if (n % 2 === 0 || n % 3 === 0) return false;
+  for (let i = 5; i * i <= n; i += 6) {
+    if (n % i === 0 || n % (i + 2) === 0) return false;
+  }
+  primeArr.push(n);
+  return true;
+}
+
+// @lc code=end
+
+```
+
+
 ## 1184.公交站间的距离
 ```js
 /*
@@ -12102,6 +12232,117 @@ var oddCells = function (m, n, indices) {
 };
 // @lc code=end
 
+
+```
+
+
+## 1260.二维网格迁移
+```ts
+/*
+ * @lc app=leetcode.cn id=1260 lang=typescript
+ *
+ * [1260] 二维网格迁移
+ * 
+ * 给你一个 m 行 n 列的二维网格 grid 和一个整数 k。你需要将 grid 迁移 k 次。
+
+每次「迁移」操作将会引发下述活动：
+
+位于 grid[i][j] 的元素将会移动到 grid[i][j + 1]。
+位于 grid[i][n - 1] 的元素将会移动到 grid[i + 1][0]。
+位于 grid[m - 1][n - 1] 的元素将会移动到 grid[0][0]。
+请你返回 k 次迁移操作后最终得到的 二维网格。
+
+ 
+
+示例 1：
+
+
+
+输入：grid = [[1,2,3],[4,5,6],[7,8,9]], k = 1
+输出：[[9,1,2],[3,4,5],[6,7,8]]
+示例 2：
+
+
+
+输入：grid = [[3,8,1,9],[19,7,2,5],[4,6,11,10],[12,0,21,13]], k = 4
+输出：[[12,0,21,13],[3,8,1,9],[19,7,2,5],[4,6,11,10]]
+示例 3：
+
+输入：grid = [[1,2,3],[4,5,6],[7,8,9]], k = 9
+输出：[[1,2,3],[4,5,6],[7,8,9]]
+ 
+ */
+
+// @lc code=start
+function shiftGrid(grid: number[][], k: number): number[][] {
+  let curr = 0;
+  while (curr < k) {
+    curr++;
+    const arr: number[] = [];
+    for (let i = 0; i < grid.length; i++) {
+      arr.push(grid[i].pop()!);
+    }
+    grid[0].unshift(arr.pop()!);
+    if(grid.length < 2) continue;
+    grid[1].unshift(arr.shift()!);
+    for (let i = 0; i < arr.length; i++) {
+      grid[i + 2].unshift(arr[i]);
+    }
+  }
+  return grid;
+}
+// @lc code=end
+
+```
+
+
+## 1266.访问所有点的最小时间
+```ts
+/*
+ * @lc app=leetcode.cn id=1266 lang=typescript
+ *
+ * [1266] 访问所有点的最小时间
+ * 
+ * 平面上有 n 个点，点的位置用整数坐标表示 points[i] = [xi, yi] 。请你计算访问所有这些点需要的 最小时间（以秒为单位）。
+
+你需要按照下面的规则在平面上移动：
+
+每一秒内，你可以：
+沿水平方向移动一个单位长度，或者
+沿竖直方向移动一个单位长度，或者
+跨过对角线移动 sqrt(2) 个单位长度（可以看作在一秒内向水平和竖直方向各移动一个单位长度）。
+必须按照数组中出现的顺序来访问这些点。
+在访问某个点时，可以经过该点后面出现的点，但经过的那些点不算作有效访问。
+ 
+
+示例 1：
+
+
+
+输入：points = [[1,1],[3,4],[-1,0]]
+输出：7
+解释：一条最佳的访问路径是： [1,1] -> [2,2] -> [3,3] -> [3,4] -> [2,3] -> [1,2] -> [0,1] -> [-1,0]   
+从 [1,1] 到 [3,4] 需要 3 秒 
+从 [3,4] 到 [-1,0] 需要 4 秒
+一共需要 7 秒
+示例 2：
+
+输入：points = [[3,2],[-2,2]]
+输出：5
+ 
+ */
+
+// @lc code=start
+function minTimeToVisitAllPoints(points: number[][]): number {
+  let res: number = 0;
+  for (let i = 0; i < points.length - 1; i++) {
+    const x = Math.abs(points[i][0] - points[i + 1][0]);
+    const y = Math.abs(points[i][1] - points[i + 1][1]);
+    res += Math.max(x, y);
+  }
+  return res;
+}
+// @lc code=end
 
 ```
 
@@ -14027,6 +14268,338 @@ function destCity(paths: string[][]) {
 };
 // @lc code=end
 
+
+```
+
+
+## 1437.是否所有-1-都至少相隔-k-个元素
+```ts
+/*
+ * @lc app=leetcode.cn id=1437 lang=typescript
+ *
+ * [1437] 是否所有 1 都至少相隔 k 个元素
+ * 
+ * 给你一个由若干 0 和 1 组成的数组 nums 以及整数 k。如果所有 1 都至少相隔 k 个元素，则返回 True ；否则，返回 False 。
+
+ 
+
+示例 1：
+
+
+
+输入：nums = [1,0,0,0,1,0,0,1], k = 2
+输出：true
+解释：每个 1 都至少相隔 2 个元素。
+示例 2：
+
+
+
+输入：nums = [1,0,0,1,0,1], k = 2
+输出：false
+解释：第二个 1 和第三个 1 之间只隔了 1 个元素。
+示例 3：
+
+输入：nums = [1,1,1,1,1], k = 0
+输出：true
+示例 4：
+
+输入：nums = [0,1,0,1], k = 1
+输出：true
+ 
+ */
+
+// @lc code=start
+function kLengthApart(nums: number[], k: number): boolean {
+  let prev = -1;
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] === 1) {
+      if (prev !== -1 && i - prev - 1 < k) return false;
+      prev = i;
+    }
+  }
+  return true;
+}
+// @lc code=end
+
+```
+
+
+## 1446.连续字符
+```ts
+/*
+ * @lc app=leetcode.cn id=1446 lang=typescript
+ *
+ * [1446] 连续字符
+ * 
+ * 给你一个字符串 s ，字符串的「能量」定义为：只包含一种字符的最长非空子字符串的长度。
+
+请你返回字符串 s 的 能量。
+
+ 
+
+示例 1：
+
+输入：s = "leetcode"
+输出：2
+解释：子字符串 "ee" 长度为 2 ，只包含字符 'e' 。
+示例 2：
+
+输入：s = "abbcccddddeeeeedcba"
+输出：5
+解释：子字符串 "eeeee" 长度为 5 ，只包含字符 'e' 。
+ 
+ */
+
+// @lc code=start
+function maxPower(s: string): number {
+  let max = 1,
+    curr = s[0],
+    len = 1;
+  for (let i = 1; i < s.length; i++) {
+    if (s[i] === curr) {
+      len++;
+      if (i === s.length - 1) {
+        max = Math.max(max, len);
+      }
+      continue;
+    }
+    curr = s[i];
+    max = Math.max(max, len);
+    len = 1;
+  }
+  return max;
+}
+// @lc code=end
+
+```
+
+
+## 1450.在既定时间做作业的学生人数
+```ts
+/*
+ * @lc app=leetcode.cn id=1450 lang=typescript
+ *
+ * [1450] 在既定时间做作业的学生人数
+ * 
+ * 给你两个整数数组 startTime（开始时间）和 endTime（结束时间），并指定一个整数 queryTime 作为查询时间。
+
+已知，第 i 名学生在 startTime[i] 时开始写作业并于 endTime[i] 时完成作业。
+
+请返回在查询时间 queryTime 时正在做作业的学生人数。形式上，返回能够使 queryTime 处于区间 [startTime[i], endTime[i]]（含）的学生人数。
+
+ 
+
+示例 1：
+
+输入：startTime = [1,2,3], endTime = [3,2,7], queryTime = 4
+输出：1
+解释：一共有 3 名学生。
+第一名学生在时间 1 开始写作业，并于时间 3 完成作业，在时间 4 没有处于做作业的状态。
+第二名学生在时间 2 开始写作业，并于时间 2 完成作业，在时间 4 没有处于做作业的状态。
+第三名学生在时间 3 开始写作业，预计于时间 7 完成作业，这是是唯一一名在时间 4 时正在做作业的学生。
+示例 2：
+
+输入：startTime = [4], endTime = [4], queryTime = 4
+输出：1
+解释：在查询时间只有一名学生在做作业。
+示例 3：
+
+输入：startTime = [4], endTime = [4], queryTime = 5
+输出：0
+示例 4：
+
+输入：startTime = [1,1,1,1], endTime = [1,3,2,4], queryTime = 7
+输出：0
+示例 5：
+
+输入：startTime = [9,8,7,6,5,4,3,2,1], endTime = [10,10,10,10,10,10,10,10,10], queryTime = 5
+输出：5
+ 
+ */
+
+// @lc code=start
+function busyStudent(
+  startTime: number[],
+  endTime: number[],
+  queryTime: number
+): number {
+  let res = 0;
+  for (let i = 0; i < startTime.length; i++) {
+    if (startTime[i] <= queryTime && endTime[i] >= queryTime) res++;
+  }
+  return res;
+}
+// @lc code=end
+
+```
+
+
+## 1455.检查单词是否为句中其他单词的前缀
+```ts
+/*
+ * @lc app=leetcode.cn id=1455 lang=typescript
+ *
+ * [1455] 检查单词是否为句中其他单词的前缀
+ * 
+ * 给你一个字符串 sentence 作为句子并指定检索词为 searchWord ，其中句子由若干用 单个空格 分隔的单词组成。请你检查检索词 searchWord 是否为句子 sentence 中任意单词的前缀。
+
+如果 searchWord 是某一个单词的前缀，则返回句子 sentence 中该单词所对应的下标（下标从 1 开始）。如果 searchWord 是多个单词的前缀，则返回匹配的第一个单词的下标（最小下标）。如果 searchWord 不是任何单词的前缀，则返回 -1 。
+
+字符串 s 的 前缀 是 s 的任何前导连续子字符串。
+
+ 
+
+示例 1：
+
+输入：sentence = "i love eating burger", searchWord = "burg"
+输出：4
+解释："burg" 是 "burger" 的前缀，而 "burger" 是句子中第 4 个单词。
+示例 2：
+
+输入：sentence = "this problem is an easy problem", searchWord = "pro"
+输出：2
+解释："pro" 是 "problem" 的前缀，而 "problem" 是句子中第 2 个也是第 6 个单词，但是应该返回最小下标 2 。
+示例 3：
+
+输入：sentence = "i am tired", searchWord = "you"
+输出：-1
+解释："you" 不是句子中任何单词的前缀。
+ 
+ */
+
+// @lc code=start
+function isPrefixOfWord(sentence: string, searchWord: string): number {
+  const arr = sentence.split(" ");
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].indexOf(searchWord) === 0) return i + 1;
+  }
+  return -1;
+}
+// @lc code=end
+
+```
+
+
+## 1460.通过翻转子数组使两个数组相等
+```ts
+/*
+ * @lc app=leetcode.cn id=1460 lang=typescript
+ *
+ * [1460] 通过翻转子数组使两个数组相等
+ * 
+ * 给你两个长度相同的整数数组 target 和 arr 。每一步中，你可以选择 arr 的任意 非空子数组 并将它翻转。你可以执行此过程任意次。
+
+如果你能让 arr 变得与 target 相同，返回 True；否则，返回 False 。
+
+ 
+
+示例 1：
+
+输入：target = [1,2,3,4], arr = [2,4,1,3]
+输出：true
+解释：你可以按照如下步骤使 arr 变成 target：
+1- 翻转子数组 [2,4,1] ，arr 变成 [1,4,2,3]
+2- 翻转子数组 [4,2] ，arr 变成 [1,2,4,3]
+3- 翻转子数组 [4,3] ，arr 变成 [1,2,3,4]
+上述方法并不是唯一的，还存在多种将 arr 变成 target 的方法。
+示例 2：
+
+输入：target = [7], arr = [7]
+输出：true
+解释：arr 不需要做任何翻转已经与 target 相等。
+示例 3：
+
+输入：target = [3,7,9], arr = [3,7,11]
+输出：false
+解释：arr 没有数字 9 ，所以无论如何也无法变成 target 。
+ 
+ */
+
+// @lc code=start
+function canBeEqual(target: number[], arr: number[]): boolean {
+  return target.sort((a, b) => a - b).join("") === arr.sort((a, b) => a - b).join("");
+}
+// @lc code=end
+
+```
+
+
+## 1464.数组中两元素的最大乘积
+```ts
+/*
+ * @lc app=leetcode.cn id=1464 lang=typescript
+ *
+ * [1464] 数组中两元素的最大乘积
+ * 
+ * 给你一个整数数组 nums，请你选择数组的两个不同下标 i 和 j，使 (nums[i]-1)*(nums[j]-1) 取得最大值。
+
+请你计算并返回该式的最大值。
+
+ 
+
+示例 1：
+
+输入：nums = [3,4,5,2]
+输出：12 
+解释：如果选择下标 i=1 和 j=2（下标从 0 开始），则可以获得最大值，(nums[1]-1)*(nums[2]-1) = (4-1)*(5-1) = 3*4 = 12 。 
+示例 2：
+
+输入：nums = [1,5,4,5]
+输出：16
+解释：选择下标 i=1 和 j=3（下标从 0 开始），则可以获得最大值 (5-1)*(5-1) = 16 。
+示例 3：
+
+输入：nums = [3,7]
+输出：12
+ 
+ */
+
+// @lc code=start
+function maxProduct(nums: number[]): number {
+  const [i, j] = nums.sort((a, b) => b - a);
+  return (i - 1) * (j - 1);
+}
+// @lc code=end
+
+```
+
+
+## 1470.重新排列数组
+```ts
+/*
+ * @lc app=leetcode.cn id=1470 lang=typescript
+ *
+ * [1470] 重新排列数组
+ * 
+ * 给你一个数组 nums ，数组中有 2n 个元素，按 [x1,x2,...,xn,y1,y2,...,yn] 的格式排列。
+
+请你将数组按 [x1,y1,x2,y2,...,xn,yn] 格式重新排列，返回重排后的数组。
+
+ 
+
+示例 1：
+
+输入：nums = [2,5,1,3,4,7], n = 3
+输出：[2,3,5,4,1,7] 
+解释：由于 x1=2, x2=5, x3=1, y1=3, y2=4, y3=7 ，所以答案为 [2,3,5,4,1,7]
+示例 2：
+
+输入：nums = [1,2,3,4,4,3,2,1], n = 4
+输出：[1,4,2,3,3,2,4,1]
+示例 3：
+
+输入：nums = [1,1,2,2], n = 2
+输出：[1,2,1,2]
+ 
+ */
+
+// @lc code=start
+function shuffle(nums: number[], n: number): number[] {
+  const res: number[] = [];
+  for (let i = 0; i < n; i++) res.push(nums[i], nums[i + n]);
+  return res;
+}
+// @lc code=end
 
 ```
 
